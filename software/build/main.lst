@@ -1,0 +1,148 @@
+ARM GAS  /tmp/ccavpc2P.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.main,"ax",%progbits
+  18              		.align	1
+  19              		.global	main
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	main:
+  27              	.LFB0:
+  28              		.file 1 "main.c"
+   1:main.c        **** #include "gpio.h"
+   2:main.c        **** #include "config.h"
+   3:main.c        **** 
+   4:main.c        **** int main(void)
+   5:main.c        **** {
+  29              		.loc 1 5 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+   6:main.c        ****     conifg_configBoard();
+  38              		.loc 1 6 5 view .LVU1
+  39 0002 FFF7FEFF 		bl	conifg_configBoard
+  40              	.LVL0:
+   7:main.c        ****     
+   8:main.c        ****     unsigned int i = 0;
+  41              		.loc 1 8 5 view .LVU2
+  42              		.loc 1 8 5 is_stmt 0 view .LVU3
+  43 0006 0FE0     		b	.L6
+  44              	.LVL1:
+  45              	.L9:
+   9:main.c        **** 
+  10:main.c        ****     while (1)
+  11:main.c        ****     {
+  12:main.c        ****         for (i = 0; i < 4000000; i++)
+  13:main.c        ****         {
+ARM GAS  /tmp/ccavpc2P.s 			page 2
+
+
+  14:main.c        ****         }
+  15:main.c        ****         gpioSetPin(gpioBusA, 7, GpioStateHigh);
+  46              		.loc 1 15 9 is_stmt 1 view .LVU4
+  47 0008 0122     		movs	r2, #1
+  48 000a 0721     		movs	r1, #7
+  49 000c 0020     		movs	r0, #0
+  50 000e FFF7FEFF 		bl	gpioSetPin
+  51              	.LVL2:
+  16:main.c        ****         for (i = 0; i < 4000000; i++)
+  52              		.loc 1 16 9 view .LVU5
+  53              		.loc 1 16 16 is_stmt 0 view .LVU6
+  54 0012 0023     		movs	r3, #0
+  55              	.LVL3:
+  56              	.L4:
+  57              		.loc 1 16 9 discriminator 1 view .LVU7
+  58 0014 074A     		ldr	r2, .L10
+  59 0016 9342     		cmp	r3, r2
+  60 0018 01D8     		bhi	.L8
+  17:main.c        ****         {
+  18:main.c        ****         }
+  61              		.loc 1 18 9 is_stmt 1 discriminator 3 view .LVU8
+  16:main.c        ****         for (i = 0; i < 4000000; i++)
+  62              		.loc 1 16 35 is_stmt 0 discriminator 3 view .LVU9
+  63 001a 0133     		adds	r3, r3, #1
+  64              	.LVL4:
+  16:main.c        ****         for (i = 0; i < 4000000; i++)
+  65              		.loc 1 16 35 discriminator 3 view .LVU10
+  66 001c FAE7     		b	.L4
+  67              	.L8:
+  19:main.c        ****         gpioSetPin(gpioBusA, 7, GpioStateLow);
+  68              		.loc 1 19 9 is_stmt 1 view .LVU11
+  69 001e 0022     		movs	r2, #0
+  70 0020 0721     		movs	r1, #7
+  71 0022 1046     		mov	r0, r2
+  72 0024 FFF7FEFF 		bl	gpioSetPin
+  73              	.LVL5:
+  74              	.L6:
+  10:main.c        ****     {
+  75              		.loc 1 10 5 view .LVU12
+  12:main.c        ****         {
+  76              		.loc 1 12 9 view .LVU13
+  12:main.c        ****         {
+  77              		.loc 1 12 16 is_stmt 0 view .LVU14
+  78 0028 0023     		movs	r3, #0
+  79              	.LVL6:
+  80              	.L2:
+  12:main.c        ****         {
+  81              		.loc 1 12 9 discriminator 1 view .LVU15
+  82 002a 024A     		ldr	r2, .L10
+  83 002c 9342     		cmp	r3, r2
+  84 002e EBD8     		bhi	.L9
+  14:main.c        ****         gpioSetPin(gpioBusA, 7, GpioStateHigh);
+  85              		.loc 1 14 9 is_stmt 1 discriminator 3 view .LVU16
+  12:main.c        ****         {
+  86              		.loc 1 12 35 is_stmt 0 discriminator 3 view .LVU17
+  87 0030 0133     		adds	r3, r3, #1
+  88              	.LVL7:
+ARM GAS  /tmp/ccavpc2P.s 			page 3
+
+
+  12:main.c        ****         {
+  89              		.loc 1 12 35 discriminator 3 view .LVU18
+  90 0032 FAE7     		b	.L2
+  91              	.L11:
+  92              		.align	2
+  93              	.L10:
+  94 0034 FF083D00 		.word	3999999
+  95              		.cfi_endproc
+  96              	.LFE0:
+  98              		.text
+  99              	.Letext0:
+ 100              		.file 2 "modules/drivers/gpio/gpio.h"
+ 101              		.file 3 "application/config/config.h"
+ARM GAS  /tmp/ccavpc2P.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 main.c
+     /tmp/ccavpc2P.s:18     .text.main:0000000000000000 $t
+     /tmp/ccavpc2P.s:26     .text.main:0000000000000000 main
+     /tmp/ccavpc2P.s:94     .text.main:0000000000000034 $d
+
+UNDEFINED SYMBOLS
+conifg_configBoard
+gpioSetPin

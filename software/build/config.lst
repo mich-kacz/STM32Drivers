@@ -1,0 +1,170 @@
+ARM GAS  /tmp/ccmiehaz.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"config.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.conifg_configBoard,"ax",%progbits
+  18              		.align	1
+  19              		.global	conifg_configBoard
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	conifg_configBoard:
+  27              	.LFB0:
+  28              		.file 1 "application/config/config.c"
+   1:application/config/config.c **** #include "config.h"
+   2:application/config/config.c **** 
+   3:application/config/config.c **** #include "gpio.h"
+   4:application/config/config.c **** #include "rcc.h"
+   5:application/config/config.c **** 
+   6:application/config/config.c **** void conifg_configBoard(void)
+   7:application/config/config.c **** {
+  29              		.loc 1 7 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 24
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38 0002 86B0     		sub	sp, sp, #24
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+   8:application/config/config.c ****     RccClocksConfig_t configClocks = {
+  41              		.loc 1 8 5 view .LVU1
+  42              		.loc 1 8 23 is_stmt 0 view .LVU2
+  43 0004 114C     		ldr	r4, .L3
+  44 0006 03AB     		add	r3, sp, #12
+  45 0008 94E80700 		ldm	r4, {r0, r1, r2}
+  46 000c 03C3     		stmia	r3!, {r0, r1}
+  47 000e 1A80     		strh	r2, [r3]	@ movhi
+   9:application/config/config.c ****         .HSI    = rccControlHsiON,
+  10:application/config/config.c ****         .HSE    = rccControlHseOFF,
+  11:application/config/config.c ****         .AHB    = rccAHBDiv1,
+ARM GAS  /tmp/ccmiehaz.s 			page 2
+
+
+  12:application/config/config.c ****         .APB1   = rccAPB1Div2,
+  13:application/config/config.c ****         .APB2   = rccAPB2Div2,
+  14:application/config/config.c ****         .PLLM   = 8,
+  15:application/config/config.c ****         .PLLN   = 80,
+  16:application/config/config.c ****         .PLLP   = rccPLLP2,
+  17:application/config/config.c ****         .PLLQ   = 2,
+  18:application/config/config.c ****         .PLLR   = 2,
+  19:application/config/config.c ****         .PLLSRC = 0};
+  20:application/config/config.c **** 
+  21:application/config/config.c ****     rccClocksConfig(configClocks);
+  48              		.loc 1 21 5 is_stmt 1 view .LVU3
+  49 0010 06AB     		add	r3, sp, #24
+  50 0012 13E90700 		ldmdb	r3, {r0, r1, r2}
+  51 0016 FFF7FEFF 		bl	rccClocksConfig
+  52              	.LVL0:
+  22:application/config/config.c ****     // SysClockConfig();
+  23:application/config/config.c **** 
+  24:application/config/config.c ****     GpioConfig_t configPin = {
+  53              		.loc 1 24 5 view .LVU4
+  54              		.loc 1 24 18 is_stmt 0 view .LVU5
+  55 001a 0C34     		adds	r4, r4, #12
+  56 001c 94E80300 		ldm	r4, {r0, r1}
+  57 0020 0190     		str	r0, [sp, #4]
+  58 0022 ADF80810 		strh	r1, [sp, #8]	@ movhi
+  25:application/config/config.c ****         .bus       = gpioBusA,
+  26:application/config/config.c ****         .mode      = gpioModeOutput,
+  27:application/config/config.c ****         .type      = gpioTypeOutputPushPull,
+  28:application/config/config.c ****         .speed     = gpioLowSpeed,
+  29:application/config/config.c ****         .pull      = gpioNoPull,
+  30:application/config/config.c ****         .pinNumber = 5};
+  31:application/config/config.c **** 
+  32:application/config/config.c ****     gpioConfigPin(configPin);
+  59              		.loc 1 32 5 is_stmt 1 view .LVU6
+  60 0026 01AC     		add	r4, sp, #4
+  61 0028 94E80300 		ldm	r4, {r0, r1}
+  62 002c FFF7FEFF 		bl	gpioConfigPin
+  63              	.LVL1:
+  33:application/config/config.c **** 
+  34:application/config/config.c ****     configPin.pinNumber = 7;
+  64              		.loc 1 34 5 view .LVU7
+  65              		.loc 1 34 25 is_stmt 0 view .LVU8
+  66 0030 9DF80930 		ldrb	r3, [sp, #9]	@ zero_extendqisi2
+  67 0034 0722     		movs	r2, #7
+  68 0036 62F30303 		bfi	r3, r2, #0, #4
+  69 003a 8DF80930 		strb	r3, [sp, #9]
+  35:application/config/config.c **** 
+  36:application/config/config.c ****     gpioConfigPin(configPin);
+  70              		.loc 1 36 5 is_stmt 1 view .LVU9
+  71 003e 94E80300 		ldm	r4, {r0, r1}
+  72 0042 FFF7FEFF 		bl	gpioConfigPin
+  73              	.LVL2:
+  37:application/config/config.c **** }...
+  74              		.loc 1 37 1 is_stmt 0 view .LVU10
+  75 0046 06B0     		add	sp, sp, #24
+  76              	.LCFI2:
+  77              		.cfi_def_cfa_offset 8
+  78              		@ sp needed
+ARM GAS  /tmp/ccmiehaz.s 			page 3
+
+
+  79 0048 10BD     		pop	{r4, pc}
+  80              	.L4:
+  81 004a 00BF     		.align	2
+  82              	.L3:
+  83 004c 00000000 		.word	.LANCHOR0
+  84              		.cfi_endproc
+  85              	.LFE0:
+  87              		.section	.rodata
+  88              		.align	2
+  89              		.set	.LANCHOR0,. + 0
+  90              	.LC0:
+  91 0000 01       		.byte	1
+  92 0001 00       		.byte	0
+  93 0002 00       		.byte	0
+  94 0003 04       		.byte	4
+  95 0004 04       		.byte	4
+  96 0005 00       		.byte	0
+  97 0006 12       		.byte	18
+  98 0007 00       		.space	1
+  99 0008 50       		.byte	80
+ 100 0009 10       		.byte	16
+ 101 000a 0000     		.space	2
+ 102              	.LC1:
+ 103 000c 00       		.byte	0
+ 104 000d 01       		.byte	1
+ 105 000e 00       		.byte	0
+ 106 000f 00       		.byte	0
+ 107 0010 00       		.byte	0
+ 108 0011 05       		.byte	5
+ 109              		.text
+ 110              	.Letext0:
+ 111              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 112              		.file 3 "modules/drivers/gpio/gpio.h"
+ 113              		.file 4 "modules/drivers/rcc/rcc.h"
+ARM GAS  /tmp/ccmiehaz.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 config.c
+     /tmp/ccmiehaz.s:18     .text.conifg_configBoard:0000000000000000 $t
+     /tmp/ccmiehaz.s:26     .text.conifg_configBoard:0000000000000000 conifg_configBoard
+     /tmp/ccmiehaz.s:83     .text.conifg_configBoard:000000000000004c $d
+     /tmp/ccmiehaz.s:88     .rodata:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+rccClocksConfig
+gpioConfigPin

@@ -1,0 +1,183 @@
+ARM GAS  /tmp/cckjov6X.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"flash.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.flashSetLatency,"ax",%progbits
+  18              		.align	1
+  19              		.global	flashSetLatency
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	flashSetLatency:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "modules/drivers/flash/flash.c"
+   1:modules/drivers/flash/flash.c **** #include "flash.h"
+   2:modules/drivers/flash/flash.c **** 
+   3:modules/drivers/flash/flash.c **** #include <stdint.h>
+   4:modules/drivers/flash/flash.c **** 
+   5:modules/drivers/flash/flash.c **** #include "flashRegisters.h"
+   6:modules/drivers/flash/flash.c **** 
+   7:modules/drivers/flash/flash.c **** 
+   8:modules/drivers/flash/flash.c **** #define REG_VAL(X) (*(volatile uint32_t*)X)
+   9:modules/drivers/flash/flash.c **** 
+  10:modules/drivers/flash/flash.c **** 
+  11:modules/drivers/flash/flash.c **** int flashSetLatency(unsigned int latency)
+  12:modules/drivers/flash/flash.c **** {
+  30              		.loc 1 12 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  13:modules/drivers/flash/flash.c ****     int error = -1;
+  35              		.loc 1 13 5 view .LVU1
+  14:modules/drivers/flash/flash.c ****     if (latency > 15)
+  36              		.loc 1 14 5 view .LVU2
+  37              		.loc 1 14 8 is_stmt 0 view .LVU3
+  38 0000 0F28     		cmp	r0, #15
+  39 0002 06D8     		bhi	.L3
+  15:modules/drivers/flash/flash.c ****     {
+  16:modules/drivers/flash/flash.c ****         error = -1;
+  17:modules/drivers/flash/flash.c ****     }
+  18:modules/drivers/flash/flash.c ****     else
+  19:modules/drivers/flash/flash.c ****     {
+ARM GAS  /tmp/cckjov6X.s 			page 2
+
+
+  20:modules/drivers/flash/flash.c ****         REG_VAL(FLASH_FLASH_ACR) |= (uint8_t)latency;
+  40              		.loc 1 20 9 is_stmt 1 view .LVU4
+  41              		.loc 1 20 34 is_stmt 0 view .LVU5
+  42 0004 044B     		ldr	r3, .L4
+  43 0006 1A68     		ldr	r2, [r3]
+  44 0008 C0B2     		uxtb	r0, r0
+  45              	.LVL1:
+  46              		.loc 1 20 34 view .LVU6
+  47 000a 1043     		orrs	r0, r0, r2
+  48 000c 1860     		str	r0, [r3]
+  21:modules/drivers/flash/flash.c ****         error = 1;
+  49              		.loc 1 21 9 is_stmt 1 view .LVU7
+  50              	.LVL2:
+  51              		.loc 1 21 15 is_stmt 0 view .LVU8
+  52 000e 0120     		movs	r0, #1
+  53 0010 7047     		bx	lr
+  54              	.LVL3:
+  55              	.L3:
+  16:modules/drivers/flash/flash.c ****     }
+  56              		.loc 1 16 15 view .LVU9
+  57 0012 4FF0FF30 		mov	r0, #-1
+  58              	.LVL4:
+  22:modules/drivers/flash/flash.c ****     }
+  23:modules/drivers/flash/flash.c ****     return error;
+  59              		.loc 1 23 5 is_stmt 1 view .LVU10
+  24:modules/drivers/flash/flash.c **** }
+  60              		.loc 1 24 1 is_stmt 0 view .LVU11
+  61 0016 7047     		bx	lr
+  62              	.L5:
+  63              		.align	2
+  64              	.L4:
+  65 0018 003C0240 		.word	1073888256
+  66              		.cfi_endproc
+  67              	.LFE0:
+  69              		.section	.text.flashSetDataCache,"ax",%progbits
+  70              		.align	1
+  71              		.global	flashSetDataCache
+  72              		.syntax unified
+  73              		.thumb
+  74              		.thumb_func
+  75              		.fpu fpv4-sp-d16
+  77              	flashSetDataCache:
+  78              	.LFB1:
+  25:modules/drivers/flash/flash.c **** 
+  26:modules/drivers/flash/flash.c **** void flashSetDataCache(FlashCacheConfig_t config)
+  27:modules/drivers/flash/flash.c **** {
+  79              		.loc 1 27 1 is_stmt 1 view -0
+  80              		.cfi_startproc
+  81              		@ args = 0, pretend = 0, frame = 8
+  82              		@ frame_needed = 0, uses_anonymous_args = 0
+  83              		@ link register save eliminated.
+  84 0000 82B0     		sub	sp, sp, #8
+  85              	.LCFI0:
+  86              		.cfi_def_cfa_offset 8
+  87 0002 02AB     		add	r3, sp, #8
+  88 0004 03E90300 		stmdb	r3, {r0, r1}
+  28:modules/drivers/flash/flash.c ****     REG_VAL(FLASH_FLASH_ACR) |=
+ARM GAS  /tmp/cckjov6X.s 			page 3
+
+
+  89              		.loc 1 28 5 view .LVU13
+  90              		.loc 1 28 30 is_stmt 0 view .LVU14
+  91 0008 0C49     		ldr	r1, .L8
+  92 000a 0A68     		ldr	r2, [r1]
+  29:modules/drivers/flash/flash.c ****         ((config.PRFTEN << 8) | (config.ICEN << 9) | (config.DCEN << 10)
+  93              		.loc 1 29 17 view .LVU15
+  94 000c 9DF80000 		ldrb	r0, [sp]	@ zero_extendqisi2
+  95              		.loc 1 29 40 view .LVU16
+  96 0010 9DF80130 		ldrb	r3, [sp, #1]	@ zero_extendqisi2
+  97              		.loc 1 29 46 view .LVU17
+  98 0014 5B02     		lsls	r3, r3, #9
+  99              		.loc 1 29 31 view .LVU18
+ 100 0016 43EA0023 		orr	r3, r3, r0, lsl #8
+ 101              		.loc 1 29 61 view .LVU19
+ 102 001a 9DF80200 		ldrb	r0, [sp, #2]	@ zero_extendqisi2
+ 103              		.loc 1 29 52 view .LVU20
+ 104 001e 43EA8023 		orr	r3, r3, r0, lsl #10
+  30:modules/drivers/flash/flash.c ****          | (config.ICRST << 11) | (config.DCRST << 12));
+ 105              		.loc 1 30 19 view .LVU21
+ 106 0022 9DF80300 		ldrb	r0, [sp, #3]	@ zero_extendqisi2
+ 107              		.loc 1 30 10 view .LVU22
+ 108 0026 43EAC023 		orr	r3, r3, r0, lsl #11
+ 109              		.loc 1 30 42 view .LVU23
+ 110 002a 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 111              		.loc 1 30 33 view .LVU24
+ 112 002e 43EA0033 		orr	r3, r3, r0, lsl #12
+  28:modules/drivers/flash/flash.c ****     REG_VAL(FLASH_FLASH_ACR) |=
+ 113              		.loc 1 28 30 view .LVU25
+ 114 0032 1343     		orrs	r3, r3, r2
+ 115 0034 0B60     		str	r3, [r1]
+  31:modules/drivers/flash/flash.c **** }...
+ 116              		.loc 1 31 1 view .LVU26
+ 117 0036 02B0     		add	sp, sp, #8
+ 118              	.LCFI1:
+ 119              		.cfi_def_cfa_offset 0
+ 120              		@ sp needed
+ 121 0038 7047     		bx	lr
+ 122              	.L9:
+ 123 003a 00BF     		.align	2
+ 124              	.L8:
+ 125 003c 003C0240 		.word	1073888256
+ 126              		.cfi_endproc
+ 127              	.LFE1:
+ 129              		.text
+ 130              	.Letext0:
+ 131              		.file 2 "modules/drivers/flash/flash.h"
+ 132              		.file 3 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ARM GAS  /tmp/cckjov6X.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 flash.c
+     /tmp/cckjov6X.s:18     .text.flashSetLatency:0000000000000000 $t
+     /tmp/cckjov6X.s:26     .text.flashSetLatency:0000000000000000 flashSetLatency
+     /tmp/cckjov6X.s:65     .text.flashSetLatency:0000000000000018 $d
+     /tmp/cckjov6X.s:70     .text.flashSetDataCache:0000000000000000 $t
+     /tmp/cckjov6X.s:77     .text.flashSetDataCache:0000000000000000 flashSetDataCache
+     /tmp/cckjov6X.s:125    .text.flashSetDataCache:000000000000003c $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,667 @@
+ARM GAS  /tmp/ccqSdgX5.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"gpio.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.getBusReg,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	getBusReg:
+  26              	.LVL0:
+  27              	.LFB0:
+  28              		.file 1 "modules/drivers/gpio/gpio.c"
+   1:modules/drivers/gpio/gpio.c **** 
+   2:modules/drivers/gpio/gpio.c **** 
+   3:modules/drivers/gpio/gpio.c **** /*includes*/
+   4:modules/drivers/gpio/gpio.c **** #include "gpio.h"
+   5:modules/drivers/gpio/gpio.c **** 
+   6:modules/drivers/gpio/gpio.c **** #include "gpioRegisters.h"
+   7:modules/drivers/gpio/gpio.c **** #include "rcc.h"
+   8:modules/drivers/gpio/gpio.c **** 
+   9:modules/drivers/gpio/gpio.c **** /*Constant and macros*/
+  10:modules/drivers/gpio/gpio.c **** #define REG_VAL(X) (*(volatile uint32_t*)X)
+  11:modules/drivers/gpio/gpio.c **** 
+  12:modules/drivers/gpio/gpio.c **** /*Private types*/
+  13:modules/drivers/gpio/gpio.c **** 
+  14:modules/drivers/gpio/gpio.c **** typedef struct GpioRegisters_s
+  15:modules/drivers/gpio/gpio.c **** {
+  16:modules/drivers/gpio/gpio.c ****     uint32_t mode;
+  17:modules/drivers/gpio/gpio.c ****     uint32_t oType;
+  18:modules/drivers/gpio/gpio.c ****     uint32_t oSpeed;
+  19:modules/drivers/gpio/gpio.c ****     uint32_t pullUpDown;
+  20:modules/drivers/gpio/gpio.c ****     uint32_t outputData;
+  21:modules/drivers/gpio/gpio.c ****     uint32_t bitSetReset;
+  22:modules/drivers/gpio/gpio.c ****     uint32_t lock;
+  23:modules/drivers/gpio/gpio.c ****     uint32_t alternateFunctionLow;
+  24:modules/drivers/gpio/gpio.c ****     uint32_t alternateFuntionHigh;
+  25:modules/drivers/gpio/gpio.c **** } GpioRegisters_t;
+  26:modules/drivers/gpio/gpio.c **** 
+  27:modules/drivers/gpio/gpio.c **** /*Private variables*/
+  28:modules/drivers/gpio/gpio.c **** 
+  29:modules/drivers/gpio/gpio.c **** 
+  30:modules/drivers/gpio/gpio.c **** /*Private functions*/
+ARM GAS  /tmp/ccqSdgX5.s 			page 2
+
+
+  31:modules/drivers/gpio/gpio.c **** static uintptr_t getBusReg(GpioBus_t bus)
+  32:modules/drivers/gpio/gpio.c **** {
+  29              		.loc 1 32 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 32
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34              		.loc 1 32 1 is_stmt 0 view .LVU1
+  35 0000 70B4     		push	{r4, r5, r6}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 12
+  38              		.cfi_offset 4, -12
+  39              		.cfi_offset 5, -8
+  40              		.cfi_offset 6, -4
+  41 0002 89B0     		sub	sp, sp, #36
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 48
+  44 0004 0646     		mov	r6, r0
+  33:modules/drivers/gpio/gpio.c ****     uintptr_t regTab[] = {
+  45              		.loc 1 33 5 is_stmt 1 view .LVU2
+  46              		.loc 1 33 15 is_stmt 0 view .LVU3
+  47 0006 6C46     		mov	r4, sp
+  48 0008 074D     		ldr	r5, .L3
+  49 000a 0FCD     		ldmia	r5!, {r0, r1, r2, r3}
+  50              	.LVL1:
+  51              		.loc 1 33 15 view .LVU4
+  52 000c 0FC4     		stmia	r4!, {r0, r1, r2, r3}
+  53 000e 95E80F00 		ldm	r5, {r0, r1, r2, r3}
+  54 0012 84E80F00 		stm	r4, {r0, r1, r2, r3}
+  34:modules/drivers/gpio/gpio.c ****         GPIO_GPIOA,
+  35:modules/drivers/gpio/gpio.c ****         GPIO_GPIOB,
+  36:modules/drivers/gpio/gpio.c ****         GPIO_GPIOC,
+  37:modules/drivers/gpio/gpio.c ****         GPIO_GPIOD,
+  38:modules/drivers/gpio/gpio.c ****         GPIO_GPIOE,
+  39:modules/drivers/gpio/gpio.c ****         GPIO_GPIOF,
+  40:modules/drivers/gpio/gpio.c ****         GPIO_GPIOG,
+  41:modules/drivers/gpio/gpio.c ****         GPIO_GPIOH};
+  42:modules/drivers/gpio/gpio.c ****     return regTab[bus];
+  55              		.loc 1 42 5 is_stmt 1 view .LVU5
+  56              		.loc 1 42 18 is_stmt 0 view .LVU6
+  57 0016 08AB     		add	r3, sp, #32
+  58 0018 03EB8606 		add	r6, r3, r6, lsl #2
+  43:modules/drivers/gpio/gpio.c **** }
+  59              		.loc 1 43 1 view .LVU7
+  60 001c 56F8200C 		ldr	r0, [r6, #-32]
+  61 0020 09B0     		add	sp, sp, #36
+  62              	.LCFI2:
+  63              		.cfi_def_cfa_offset 12
+  64              		@ sp needed
+  65 0022 70BC     		pop	{r4, r5, r6}
+  66              	.LCFI3:
+  67              		.cfi_restore 6
+  68              		.cfi_restore 5
+  69              		.cfi_restore 4
+  70              		.cfi_def_cfa_offset 0
+  71 0024 7047     		bx	lr
+  72              	.L4:
+ARM GAS  /tmp/ccqSdgX5.s 			page 3
+
+
+  73 0026 00BF     		.align	2
+  74              	.L3:
+  75 0028 00000000 		.word	.LANCHOR0
+  76              		.cfi_endproc
+  77              	.LFE0:
+  79              		.section	.text.gpioInit,"ax",%progbits
+  80              		.align	1
+  81              		.syntax unified
+  82              		.thumb
+  83              		.thumb_func
+  84              		.fpu fpv4-sp-d16
+  86              	gpioInit:
+  87              	.LVL2:
+  88              	.LFB1:
+  44:modules/drivers/gpio/gpio.c **** 
+  45:modules/drivers/gpio/gpio.c **** static void gpioInit(GpioBus_t bus)
+  46:modules/drivers/gpio/gpio.c **** {
+  89              		.loc 1 46 1 is_stmt 1 view -0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              		.loc 1 46 1 is_stmt 0 view .LVU9
+  94 0000 08B5     		push	{r3, lr}
+  95              	.LCFI4:
+  96              		.cfi_def_cfa_offset 8
+  97              		.cfi_offset 3, -8
+  98              		.cfi_offset 14, -4
+  47:modules/drivers/gpio/gpio.c ****     switch (bus)
+  99              		.loc 1 47 5 is_stmt 1 view .LVU10
+ 100 0002 0728     		cmp	r0, #7
+ 101 0004 08D8     		bhi	.L5
+ 102 0006 DFE800F0 		tbb	[pc, r0]
+ 103              	.L8:
+ 104 000a 04       		.byte	(.L15-.L8)/2
+ 105 000b 08       		.byte	(.L14-.L8)/2
+ 106 000c 0C       		.byte	(.L13-.L8)/2
+ 107 000d 10       		.byte	(.L12-.L8)/2
+ 108 000e 14       		.byte	(.L11-.L8)/2
+ 109 000f 18       		.byte	(.L10-.L8)/2
+ 110 0010 1C       		.byte	(.L9-.L8)/2
+ 111 0011 20       		.byte	(.L7-.L8)/2
+ 112              		.p2align 1
+ 113              	.L15:
+  48:modules/drivers/gpio/gpio.c ****     {
+  49:modules/drivers/gpio/gpio.c ****         case gpioBusA:
+  50:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioA);
+ 114              		.loc 1 50 13 view .LVU11
+ 115 0012 0120     		movs	r0, #1
+ 116              	.LVL3:
+ 117              		.loc 1 50 13 is_stmt 0 view .LVU12
+ 118 0014 FFF7FEFF 		bl	rccEnableAHB1
+ 119              	.LVL4:
+  51:modules/drivers/gpio/gpio.c ****             break;
+ 120              		.loc 1 51 13 is_stmt 1 view .LVU13
+ 121              	.L5:
+  52:modules/drivers/gpio/gpio.c ****         case gpioBusB:
+  53:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioB);
+ARM GAS  /tmp/ccqSdgX5.s 			page 4
+
+
+  54:modules/drivers/gpio/gpio.c ****             break;
+  55:modules/drivers/gpio/gpio.c ****         case gpioBusC:
+  56:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioC);
+  57:modules/drivers/gpio/gpio.c ****             break;
+  58:modules/drivers/gpio/gpio.c ****         case gpioBusD:
+  59:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioD);
+  60:modules/drivers/gpio/gpio.c ****             break;
+  61:modules/drivers/gpio/gpio.c ****         case gpioBusE:
+  62:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioE);
+  63:modules/drivers/gpio/gpio.c ****             break;
+  64:modules/drivers/gpio/gpio.c ****         case gpioBusF:
+  65:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioF);
+  66:modules/drivers/gpio/gpio.c ****             break;
+  67:modules/drivers/gpio/gpio.c ****         case gpioBusG:
+  68:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioG);
+  69:modules/drivers/gpio/gpio.c ****             break;
+  70:modules/drivers/gpio/gpio.c ****         case gpioBusH:
+  71:modules/drivers/gpio/gpio.c ****             rccEnableAHB1(rccAHB1GpioH);
+  72:modules/drivers/gpio/gpio.c ****             break;
+  73:modules/drivers/gpio/gpio.c ****         default:
+  74:modules/drivers/gpio/gpio.c ****             break;
+  75:modules/drivers/gpio/gpio.c ****     }
+  76:modules/drivers/gpio/gpio.c **** }
+ 122              		.loc 1 76 1 is_stmt 0 view .LVU14
+ 123 0018 08BD     		pop	{r3, pc}
+ 124              	.LVL5:
+ 125              	.L14:
+  53:modules/drivers/gpio/gpio.c ****             break;
+ 126              		.loc 1 53 13 is_stmt 1 view .LVU15
+ 127 001a 0220     		movs	r0, #2
+ 128              	.LVL6:
+  53:modules/drivers/gpio/gpio.c ****             break;
+ 129              		.loc 1 53 13 is_stmt 0 view .LVU16
+ 130 001c FFF7FEFF 		bl	rccEnableAHB1
+ 131              	.LVL7:
+  54:modules/drivers/gpio/gpio.c ****         case gpioBusC:
+ 132              		.loc 1 54 13 is_stmt 1 view .LVU17
+ 133 0020 FAE7     		b	.L5
+ 134              	.LVL8:
+ 135              	.L13:
+  56:modules/drivers/gpio/gpio.c ****             break;
+ 136              		.loc 1 56 13 view .LVU18
+ 137 0022 0420     		movs	r0, #4
+ 138              	.LVL9:
+  56:modules/drivers/gpio/gpio.c ****             break;
+ 139              		.loc 1 56 13 is_stmt 0 view .LVU19
+ 140 0024 FFF7FEFF 		bl	rccEnableAHB1
+ 141              	.LVL10:
+  57:modules/drivers/gpio/gpio.c ****         case gpioBusD:
+ 142              		.loc 1 57 13 is_stmt 1 view .LVU20
+ 143 0028 F6E7     		b	.L5
+ 144              	.LVL11:
+ 145              	.L12:
+  59:modules/drivers/gpio/gpio.c ****             break;
+ 146              		.loc 1 59 13 view .LVU21
+ 147 002a 0820     		movs	r0, #8
+ 148              	.LVL12:
+ARM GAS  /tmp/ccqSdgX5.s 			page 5
+
+
+  59:modules/drivers/gpio/gpio.c ****             break;
+ 149              		.loc 1 59 13 is_stmt 0 view .LVU22
+ 150 002c FFF7FEFF 		bl	rccEnableAHB1
+ 151              	.LVL13:
+  60:modules/drivers/gpio/gpio.c ****         case gpioBusE:
+ 152              		.loc 1 60 13 is_stmt 1 view .LVU23
+ 153 0030 F2E7     		b	.L5
+ 154              	.LVL14:
+ 155              	.L11:
+  62:modules/drivers/gpio/gpio.c ****             break;
+ 156              		.loc 1 62 13 view .LVU24
+ 157 0032 1020     		movs	r0, #16
+ 158              	.LVL15:
+  62:modules/drivers/gpio/gpio.c ****             break;
+ 159              		.loc 1 62 13 is_stmt 0 view .LVU25
+ 160 0034 FFF7FEFF 		bl	rccEnableAHB1
+ 161              	.LVL16:
+  63:modules/drivers/gpio/gpio.c ****         case gpioBusF:
+ 162              		.loc 1 63 13 is_stmt 1 view .LVU26
+ 163 0038 EEE7     		b	.L5
+ 164              	.LVL17:
+ 165              	.L10:
+  65:modules/drivers/gpio/gpio.c ****             break;
+ 166              		.loc 1 65 13 view .LVU27
+ 167 003a 2020     		movs	r0, #32
+ 168              	.LVL18:
+  65:modules/drivers/gpio/gpio.c ****             break;
+ 169              		.loc 1 65 13 is_stmt 0 view .LVU28
+ 170 003c FFF7FEFF 		bl	rccEnableAHB1
+ 171              	.LVL19:
+  66:modules/drivers/gpio/gpio.c ****         case gpioBusG:
+ 172              		.loc 1 66 13 is_stmt 1 view .LVU29
+ 173 0040 EAE7     		b	.L5
+ 174              	.LVL20:
+ 175              	.L9:
+  68:modules/drivers/gpio/gpio.c ****             break;
+ 176              		.loc 1 68 13 view .LVU30
+ 177 0042 4020     		movs	r0, #64
+ 178              	.LVL21:
+  68:modules/drivers/gpio/gpio.c ****             break;
+ 179              		.loc 1 68 13 is_stmt 0 view .LVU31
+ 180 0044 FFF7FEFF 		bl	rccEnableAHB1
+ 181              	.LVL22:
+  69:modules/drivers/gpio/gpio.c ****         case gpioBusH:
+ 182              		.loc 1 69 13 is_stmt 1 view .LVU32
+ 183 0048 E6E7     		b	.L5
+ 184              	.LVL23:
+ 185              	.L7:
+  71:modules/drivers/gpio/gpio.c ****             break;
+ 186              		.loc 1 71 13 view .LVU33
+ 187 004a 8020     		movs	r0, #128
+ 188              	.LVL24:
+  71:modules/drivers/gpio/gpio.c ****             break;
+ 189              		.loc 1 71 13 is_stmt 0 view .LVU34
+ 190 004c FFF7FEFF 		bl	rccEnableAHB1
+ 191              	.LVL25:
+  72:modules/drivers/gpio/gpio.c ****         default:
+ARM GAS  /tmp/ccqSdgX5.s 			page 6
+
+
+ 192              		.loc 1 72 13 is_stmt 1 view .LVU35
+ 193              		.loc 1 76 1 is_stmt 0 view .LVU36
+ 194 0050 E2E7     		b	.L5
+ 195              		.cfi_endproc
+ 196              	.LFE1:
+ 198              		.section	.text.gpioConfigPin,"ax",%progbits
+ 199              		.align	1
+ 200              		.global	gpioConfigPin
+ 201              		.syntax unified
+ 202              		.thumb
+ 203              		.thumb_func
+ 204              		.fpu fpv4-sp-d16
+ 206              	gpioConfigPin:
+ 207              	.LFB2:
+  77:modules/drivers/gpio/gpio.c **** 
+  78:modules/drivers/gpio/gpio.c **** 
+  79:modules/drivers/gpio/gpio.c **** /*Exposed API*/
+  80:modules/drivers/gpio/gpio.c **** 
+  81:modules/drivers/gpio/gpio.c **** void gpioConfigPin(GpioConfig_t config)
+  82:modules/drivers/gpio/gpio.c **** {
+ 208              		.loc 1 82 1 is_stmt 1 view -0
+ 209              		.cfi_startproc
+ 210              		@ args = 0, pretend = 0, frame = 8
+ 211              		@ frame_needed = 0, uses_anonymous_args = 0
+ 212 0000 10B5     		push	{r4, lr}
+ 213              	.LCFI5:
+ 214              		.cfi_def_cfa_offset 8
+ 215              		.cfi_offset 4, -8
+ 216              		.cfi_offset 14, -4
+ 217 0002 82B0     		sub	sp, sp, #8
+ 218              	.LCFI6:
+ 219              		.cfi_def_cfa_offset 16
+ 220 0004 02AB     		add	r3, sp, #8
+ 221 0006 03E90300 		stmdb	r3, {r0, r1}
+  83:modules/drivers/gpio/gpio.c ****     gpioInit(config.bus);
+ 222              		.loc 1 83 5 view .LVU38
+ 223 000a 9DF80040 		ldrb	r4, [sp]	@ zero_extendqisi2
+ 224 000e 2046     		mov	r0, r4
+ 225 0010 FFF7FEFF 		bl	gpioInit
+ 226              	.LVL26:
+  84:modules/drivers/gpio/gpio.c ****     volatile uint32_t* regBase = (void*)getBusReg(config.bus);
+ 227              		.loc 1 84 5 view .LVU39
+ 228              		.loc 1 84 41 is_stmt 0 view .LVU40
+ 229 0014 2046     		mov	r0, r4
+ 230 0016 FFF7FEFF 		bl	getBusReg
+ 231              	.LVL27:
+  85:modules/drivers/gpio/gpio.c ****     volatile uint32_t* reg     = regBase + GPIO_MODER_OFFSET;
+ 232              		.loc 1 85 5 is_stmt 1 view .LVU41
+  86:modules/drivers/gpio/gpio.c ****     *reg |= (uint32_t)(config.mode << (config.pinNumber * 2));
+ 233              		.loc 1 86 5 view .LVU42
+ 234              		.loc 1 86 10 is_stmt 0 view .LVU43
+ 235 001a 0268     		ldr	r2, [r0]
+ 236              		.loc 1 86 30 view .LVU44
+ 237 001c 9DF80140 		ldrb	r4, [sp, #1]	@ zero_extendqisi2
+ 238              		.loc 1 86 46 view .LVU45
+ 239 0020 9DF80530 		ldrb	r3, [sp, #5]	@ zero_extendqisi2
+ 240 0024 03F00F03 		and	r3, r3, #15
+ARM GAS  /tmp/ccqSdgX5.s 			page 7
+
+
+ 241              		.loc 1 86 57 view .LVU46
+ 242 0028 5900     		lsls	r1, r3, #1
+ 243              		.loc 1 86 36 view .LVU47
+ 244 002a 8C40     		lsls	r4, r4, r1
+ 245              		.loc 1 86 10 view .LVU48
+ 246 002c 2243     		orrs	r2, r2, r4
+ 247 002e 0260     		str	r2, [r0]
+  87:modules/drivers/gpio/gpio.c ****     reg = regBase + GPIO_OTYPER_OFFSET;
+ 248              		.loc 1 87 5 is_stmt 1 view .LVU49
+ 249              	.LVL28:
+  88:modules/drivers/gpio/gpio.c ****     *reg |= (uint32_t)(config.type << config.pinNumber);
+ 250              		.loc 1 88 5 view .LVU50
+ 251              		.loc 1 88 10 is_stmt 0 view .LVU51
+ 252 0030 0269     		ldr	r2, [r0, #16]
+ 253              		.loc 1 88 30 view .LVU52
+ 254 0032 9DF80240 		ldrb	r4, [sp, #2]	@ zero_extendqisi2
+ 255              		.loc 1 88 36 view .LVU53
+ 256 0036 04FA03F3 		lsl	r3, r4, r3
+ 257              		.loc 1 88 10 view .LVU54
+ 258 003a 1343     		orrs	r3, r3, r2
+ 259 003c 0361     		str	r3, [r0, #16]
+  89:modules/drivers/gpio/gpio.c ****     reg = regBase + GPIO_OSPEEDER_OFFSET;
+ 260              		.loc 1 89 5 is_stmt 1 view .LVU55
+ 261              	.LVL29:
+  90:modules/drivers/gpio/gpio.c ****     *reg |= (uint32_t)(config.speed << (config.pinNumber * 2));
+ 262              		.loc 1 90 5 view .LVU56
+ 263              		.loc 1 90 10 is_stmt 0 view .LVU57
+ 264 003e 036A     		ldr	r3, [r0, #32]
+ 265              		.loc 1 90 30 view .LVU58
+ 266 0040 9DF80320 		ldrb	r2, [sp, #3]	@ zero_extendqisi2
+ 267              		.loc 1 90 37 view .LVU59
+ 268 0044 8A40     		lsls	r2, r2, r1
+ 269              		.loc 1 90 10 view .LVU60
+ 270 0046 1343     		orrs	r3, r3, r2
+ 271 0048 0362     		str	r3, [r0, #32]
+  91:modules/drivers/gpio/gpio.c ****     reg = regBase + GPIO_PUPDR_OFFSET;
+ 272              		.loc 1 91 5 is_stmt 1 view .LVU61
+ 273              	.LVL30:
+  92:modules/drivers/gpio/gpio.c ****     *reg |= (uint32_t)(config.pull << (config.pinNumber * 2));
+ 274              		.loc 1 92 5 view .LVU62
+ 275              		.loc 1 92 10 is_stmt 0 view .LVU63
+ 276 004a 036B     		ldr	r3, [r0, #48]
+ 277              		.loc 1 92 30 view .LVU64
+ 278 004c 9DF80420 		ldrb	r2, [sp, #4]	@ zero_extendqisi2
+ 279              		.loc 1 92 36 view .LVU65
+ 280 0050 8A40     		lsls	r2, r2, r1
+ 281              		.loc 1 92 10 view .LVU66
+ 282 0052 1343     		orrs	r3, r3, r2
+ 283 0054 0363     		str	r3, [r0, #48]
+  93:modules/drivers/gpio/gpio.c **** }
+ 284              		.loc 1 93 1 view .LVU67
+ 285 0056 02B0     		add	sp, sp, #8
+ 286              	.LCFI7:
+ 287              		.cfi_def_cfa_offset 8
+ 288              		@ sp needed
+ 289 0058 10BD     		pop	{r4, pc}
+ 290              		.cfi_endproc
+ARM GAS  /tmp/ccqSdgX5.s 			page 8
+
+
+ 291              	.LFE2:
+ 293              		.section	.text.gpioSetPin,"ax",%progbits
+ 294              		.align	1
+ 295              		.global	gpioSetPin
+ 296              		.syntax unified
+ 297              		.thumb
+ 298              		.thumb_func
+ 299              		.fpu fpv4-sp-d16
+ 301              	gpioSetPin:
+ 302              	.LVL31:
+ 303              	.LFB3:
+  94:modules/drivers/gpio/gpio.c **** 
+  95:modules/drivers/gpio/gpio.c **** void gpioSetPin(GpioBus_t bus, uint8_t number, GpioPinState_t state)
+  96:modules/drivers/gpio/gpio.c **** {
+ 304              		.loc 1 96 1 is_stmt 1 view -0
+ 305              		.cfi_startproc
+ 306              		@ args = 0, pretend = 0, frame = 0
+ 307              		@ frame_needed = 0, uses_anonymous_args = 0
+ 308              		.loc 1 96 1 is_stmt 0 view .LVU69
+ 309 0000 38B5     		push	{r3, r4, r5, lr}
+ 310              	.LCFI8:
+ 311              		.cfi_def_cfa_offset 16
+ 312              		.cfi_offset 3, -16
+ 313              		.cfi_offset 4, -12
+ 314              		.cfi_offset 5, -8
+ 315              		.cfi_offset 14, -4
+ 316 0002 0D46     		mov	r5, r1
+ 317 0004 1446     		mov	r4, r2
+  97:modules/drivers/gpio/gpio.c ****     volatile uint32_t* reg = (void*)getBusReg(bus) + GPIO_BSRR_OFFSET;
+ 318              		.loc 1 97 5 is_stmt 1 view .LVU70
+ 319              		.loc 1 97 37 is_stmt 0 view .LVU71
+ 320 0006 FFF7FEFF 		bl	getBusReg
+ 321              	.LVL32:
+  98:modules/drivers/gpio/gpio.c ****     switch (state)
+ 322              		.loc 1 98 5 is_stmt 1 view .LVU72
+ 323 000a 14B1     		cbz	r4, .L20
+ 324 000c 012C     		cmp	r4, #1
+ 325 000e 08D0     		beq	.L21
+ 326              	.L19:
+  99:modules/drivers/gpio/gpio.c ****     {
+ 100:modules/drivers/gpio/gpio.c ****         case GpioStateLow:
+ 101:modules/drivers/gpio/gpio.c ****             *reg |= (1 << (number + 16));
+ 102:modules/drivers/gpio/gpio.c ****             break;
+ 103:modules/drivers/gpio/gpio.c ****         case GpioStateHigh:
+ 104:modules/drivers/gpio/gpio.c ****             *reg |= (1 << number);
+ 105:modules/drivers/gpio/gpio.c ****             break;
+ 106:modules/drivers/gpio/gpio.c ****         default:
+ 107:modules/drivers/gpio/gpio.c ****             break;
+ 108:modules/drivers/gpio/gpio.c ****     }
+ 109:modules/drivers/gpio/gpio.c **** }
+ 327              		.loc 1 109 1 is_stmt 0 view .LVU73
+ 328 0010 38BD     		pop	{r3, r4, r5, pc}
+ 329              	.L20:
+ 101:modules/drivers/gpio/gpio.c ****             break;
+ 330              		.loc 1 101 13 is_stmt 1 view .LVU74
+ 101:modules/drivers/gpio/gpio.c ****             break;
+ 331              		.loc 1 101 18 is_stmt 0 view .LVU75
+ARM GAS  /tmp/ccqSdgX5.s 			page 9
+
+
+ 332 0012 8369     		ldr	r3, [r0, #24]
+ 101:modules/drivers/gpio/gpio.c ****             break;
+ 333              		.loc 1 101 35 view .LVU76
+ 334 0014 1035     		adds	r5, r5, #16
+ 101:modules/drivers/gpio/gpio.c ****             break;
+ 335              		.loc 1 101 24 view .LVU77
+ 336 0016 0122     		movs	r2, #1
+ 337 0018 02FA05F5 		lsl	r5, r2, r5
+ 101:modules/drivers/gpio/gpio.c ****             break;
+ 338              		.loc 1 101 18 view .LVU78
+ 339 001c 1D43     		orrs	r5, r5, r3
+ 340 001e 8561     		str	r5, [r0, #24]
+ 102:modules/drivers/gpio/gpio.c ****         case GpioStateHigh:
+ 341              		.loc 1 102 13 is_stmt 1 view .LVU79
+ 342 0020 F6E7     		b	.L19
+ 343              	.L21:
+ 104:modules/drivers/gpio/gpio.c ****             break;
+ 344              		.loc 1 104 13 view .LVU80
+ 104:modules/drivers/gpio/gpio.c ****             break;
+ 345              		.loc 1 104 18 is_stmt 0 view .LVU81
+ 346 0022 8369     		ldr	r3, [r0, #24]
+ 104:modules/drivers/gpio/gpio.c ****             break;
+ 347              		.loc 1 104 24 view .LVU82
+ 348 0024 0122     		movs	r2, #1
+ 349 0026 02FA05F5 		lsl	r5, r2, r5
+ 104:modules/drivers/gpio/gpio.c ****             break;
+ 350              		.loc 1 104 18 view .LVU83
+ 351 002a 1D43     		orrs	r5, r5, r3
+ 352 002c 8561     		str	r5, [r0, #24]
+ 105:modules/drivers/gpio/gpio.c ****         default:
+ 353              		.loc 1 105 13 is_stmt 1 view .LVU84
+ 354              		.loc 1 109 1 is_stmt 0 view .LVU85
+ 355 002e EFE7     		b	.L19
+ 356              		.cfi_endproc
+ 357              	.LFE3:
+ 359              		.section	.text.gpioReadPin,"ax",%progbits
+ 360              		.align	1
+ 361              		.global	gpioReadPin
+ 362              		.syntax unified
+ 363              		.thumb
+ 364              		.thumb_func
+ 365              		.fpu fpv4-sp-d16
+ 367              	gpioReadPin:
+ 368              	.LVL33:
+ 369              	.LFB4:
+ 110:modules/drivers/gpio/gpio.c **** 
+ 111:modules/drivers/gpio/gpio.c **** 
+ 112:modules/drivers/gpio/gpio.c **** GpioPinState_t gpioReadPin(GpioBus_t bus, uint8_t number)
+ 113:modules/drivers/gpio/gpio.c **** {
+ 370              		.loc 1 113 1 is_stmt 1 view -0
+ 371              		.cfi_startproc
+ 372              		@ args = 0, pretend = 0, frame = 0
+ 373              		@ frame_needed = 0, uses_anonymous_args = 0
+ 374              		.loc 1 113 1 is_stmt 0 view .LVU87
+ 375 0000 10B5     		push	{r4, lr}
+ 376              	.LCFI9:
+ 377              		.cfi_def_cfa_offset 8
+ARM GAS  /tmp/ccqSdgX5.s 			page 10
+
+
+ 378              		.cfi_offset 4, -8
+ 379              		.cfi_offset 14, -4
+ 380 0002 0C46     		mov	r4, r1
+ 114:modules/drivers/gpio/gpio.c ****     volatile uint16_t* reg = (void*)getBusReg(bus) + GPIO_IDR_OFFSET;
+ 381              		.loc 1 114 5 is_stmt 1 view .LVU88
+ 382              		.loc 1 114 37 is_stmt 0 view .LVU89
+ 383 0004 FFF7FEFF 		bl	getBusReg
+ 384              	.LVL34:
+ 115:modules/drivers/gpio/gpio.c ****     GpioPinState_t state;
+ 385              		.loc 1 115 5 is_stmt 1 view .LVU90
+ 116:modules/drivers/gpio/gpio.c ****     if ((*reg & (1 << number)) == (1 << number))
+ 386              		.loc 1 116 5 view .LVU91
+ 387              		.loc 1 116 10 is_stmt 0 view .LVU92
+ 388 0008 038A     		ldrh	r3, [r0, #16]
+ 389              		.loc 1 116 20 view .LVU93
+ 390 000a 0121     		movs	r1, #1
+ 391 000c A140     		lsls	r1, r1, r4
+ 392              		.loc 1 116 8 view .LVU94
+ 393 000e 31EA0303 		bics	r3, r1, r3
+ 394 0012 01D0     		beq	.L28
+ 117:modules/drivers/gpio/gpio.c ****     {
+ 118:modules/drivers/gpio/gpio.c ****         state = GpioStateHigh;
+ 119:modules/drivers/gpio/gpio.c ****     }
+ 120:modules/drivers/gpio/gpio.c ****     else
+ 121:modules/drivers/gpio/gpio.c ****     {
+ 122:modules/drivers/gpio/gpio.c ****         state = GpioStateLow;
+ 395              		.loc 1 122 15 view .LVU95
+ 396 0014 0020     		movs	r0, #0
+ 397              	.LVL35:
+ 398              	.L25:
+ 123:modules/drivers/gpio/gpio.c ****     }
+ 124:modules/drivers/gpio/gpio.c ****     return state;
+ 399              		.loc 1 124 5 is_stmt 1 view .LVU96
+ 125:modules/drivers/gpio/gpio.c **** }
+ 400              		.loc 1 125 1 is_stmt 0 view .LVU97
+ 401 0016 10BD     		pop	{r4, pc}
+ 402              	.LVL36:
+ 403              	.L28:
+ 118:modules/drivers/gpio/gpio.c ****     }
+ 404              		.loc 1 118 15 view .LVU98
+ 405 0018 0120     		movs	r0, #1
+ 406              	.LVL37:
+ 118:modules/drivers/gpio/gpio.c ****     }
+ 407              		.loc 1 118 15 view .LVU99
+ 408 001a FCE7     		b	.L25
+ 409              		.cfi_endproc
+ 410              	.LFE4:
+ 412              		.section	.text.gpioReset,"ax",%progbits
+ 413              		.align	1
+ 414              		.global	gpioReset
+ 415              		.syntax unified
+ 416              		.thumb
+ 417              		.thumb_func
+ 418              		.fpu fpv4-sp-d16
+ 420              	gpioReset:
+ 421              	.LFB5:
+ 126:modules/drivers/gpio/gpio.c **** 
+ARM GAS  /tmp/ccqSdgX5.s 			page 11
+
+
+ 127:modules/drivers/gpio/gpio.c **** void gpioReset(void)
+ 128:modules/drivers/gpio/gpio.c **** {
+ 422              		.loc 1 128 1 is_stmt 1 view -0
+ 423              		.cfi_startproc
+ 424              		@ args = 0, pretend = 0, frame = 0
+ 425              		@ frame_needed = 0, uses_anonymous_args = 0
+ 426              		@ link register save eliminated.
+ 129:modules/drivers/gpio/gpio.c ****     GpioRegisters_t resetRegs = {
+ 427              		.loc 1 129 5 view .LVU101
+ 130:modules/drivers/gpio/gpio.c ****         .mode                 = 0xA8000000,
+ 131:modules/drivers/gpio/gpio.c ****         .oType                = 0,
+ 132:modules/drivers/gpio/gpio.c ****         .oSpeed               = 0,
+ 133:modules/drivers/gpio/gpio.c ****         .pullUpDown           = 0x64000000,
+ 134:modules/drivers/gpio/gpio.c ****         .outputData           = 0,
+ 135:modules/drivers/gpio/gpio.c ****         .bitSetReset          = 0,
+ 136:modules/drivers/gpio/gpio.c ****         .lock                 = 0,
+ 137:modules/drivers/gpio/gpio.c ****         .alternateFunctionLow = 0,
+ 138:modules/drivers/gpio/gpio.c ****         .alternateFuntionHigh = 0};
+ 139:modules/drivers/gpio/gpio.c **** }...
+ 428              		.loc 1 139 1 is_stmt 0 view .LVU102
+ 429 0000 7047     		bx	lr
+ 430              		.cfi_endproc
+ 431              	.LFE5:
+ 433              		.section	.rodata
+ 434              		.align	2
+ 435              		.set	.LANCHOR0,. + 0
+ 436              	.LC0:
+ 437 0000 00000240 		.word	1073872896
+ 438 0004 00040240 		.word	1073873920
+ 439 0008 00080240 		.word	1073874944
+ 440 000c 000C0240 		.word	1073875968
+ 441 0010 00100240 		.word	1073876992
+ 442 0014 00140240 		.word	1073878016
+ 443 0018 00180240 		.word	1073879040
+ 444 001c 001C0240 		.word	1073880064
+ 445              		.text
+ 446              	.Letext0:
+ 447              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 448              		.file 3 "modules/drivers/gpio/gpio.h"
+ 449              		.file 4 "modules/drivers/rcc/rcc.h"
+ARM GAS  /tmp/ccqSdgX5.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gpio.c
+     /tmp/ccqSdgX5.s:18     .text.getBusReg:0000000000000000 $t
+     /tmp/ccqSdgX5.s:25     .text.getBusReg:0000000000000000 getBusReg
+     /tmp/ccqSdgX5.s:75     .text.getBusReg:0000000000000028 $d
+     /tmp/ccqSdgX5.s:80     .text.gpioInit:0000000000000000 $t
+     /tmp/ccqSdgX5.s:86     .text.gpioInit:0000000000000000 gpioInit
+     /tmp/ccqSdgX5.s:104    .text.gpioInit:000000000000000a $d
+     /tmp/ccqSdgX5.s:112    .text.gpioInit:0000000000000012 $t
+     /tmp/ccqSdgX5.s:199    .text.gpioConfigPin:0000000000000000 $t
+     /tmp/ccqSdgX5.s:206    .text.gpioConfigPin:0000000000000000 gpioConfigPin
+     /tmp/ccqSdgX5.s:294    .text.gpioSetPin:0000000000000000 $t
+     /tmp/ccqSdgX5.s:301    .text.gpioSetPin:0000000000000000 gpioSetPin
+     /tmp/ccqSdgX5.s:360    .text.gpioReadPin:0000000000000000 $t
+     /tmp/ccqSdgX5.s:367    .text.gpioReadPin:0000000000000000 gpioReadPin
+     /tmp/ccqSdgX5.s:413    .text.gpioReset:0000000000000000 $t
+     /tmp/ccqSdgX5.s:420    .text.gpioReset:0000000000000000 gpioReset
+     /tmp/ccqSdgX5.s:434    .rodata:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+rccEnableAHB1
