@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccbjVp6h.s 			page 1
+ARM GAS  /tmp/ccanCFPQ.s 			page 1
 
 
    1              		.cpu cortex-m4
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccbjVp6h.s 			page 1
   43              		.loc 1 13 1 view .LVU4
   44 000a 7047     		bx	lr
   45              	.L3:
-ARM GAS  /tmp/ccbjVp6h.s 			page 2
+ARM GAS  /tmp/ccanCFPQ.s 			page 2
 
 
   46              		.align	2
@@ -70,13 +70,13 @@ ARM GAS  /tmp/ccbjVp6h.s 			page 1
   53              	.Letext0:
   54              		.file 2 "modules/drivers/power/power.h"
   55              		.file 3 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
-ARM GAS  /tmp/ccbjVp6h.s 			page 3
+ARM GAS  /tmp/ccanCFPQ.s 			page 3
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 power.c
-     /tmp/ccbjVp6h.s:18     .text.powerSetVOS:0000000000000000 $t
-     /tmp/ccbjVp6h.s:26     .text.powerSetVOS:0000000000000000 powerSetVOS
-     /tmp/ccbjVp6h.s:48     .text.powerSetVOS:000000000000000c $d
+     /tmp/ccanCFPQ.s:18     .text.powerSetVOS:0000000000000000 $t
+     /tmp/ccanCFPQ.s:26     .text.powerSetVOS:0000000000000000 powerSetVOS
+     /tmp/ccanCFPQ.s:48     .text.powerSetVOS:000000000000000c $d
 
 NO UNDEFINED SYMBOLS

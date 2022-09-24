@@ -1,6 +1,7 @@
 #include "gpio.h"
 #include "config.h"
 
+
 int main(void)
 {
     conifg_configBoard();

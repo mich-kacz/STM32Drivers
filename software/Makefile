@@ -88,8 +88,8 @@ C_INCLUDES = \
 -Imodules/drivers/rcc \
 -Imodules/drivers/flash \
 -Imodules/drivers/power \
--Imodules/drivers/CMSIS \
 -Iapplication/config 
+#-Imodules/drivers/CMSIS \
 
 
 

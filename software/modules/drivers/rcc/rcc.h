@@ -24,6 +24,56 @@ typedef enum RccAHB1Control_e
     rccAHB1OtghsUlpi = 0b01000000000000000000000000000000
 } RccAHB1Control_t;
 
+typedef enum RccAPB1Control_e
+{
+    RccAPB1TIM2_EN    = 1,
+    RccAPB1TIM3_EN    = (1 << 1),
+    RccAPB1TIM4_EN    = (1 << 2),
+    RccAPB1TIM5_EN    = (1 << 3),
+    RccAPB1TIM6_EN    = (1 << 4),
+    RccAPB1TIM7_EN    = (1 << 5),
+    RccAPB1TIM12_EN   = (1 << 6),
+    RccAPB1TIM13_EN   = (1 << 7),
+    RccAPB1TIM14_EN   = (1 << 8),
+    RccAPB1WWDG_EN    = (1 << 11),
+    RccAPB1SPI2_EN    = (1 << 14),
+    RccAPB1SPI3_EN    = (1 << 15),
+    RccAPB1SPDIFRX_EN = (1 << 16),
+    RccAPB1USART2_EN  = (1 << 17),
+    RccAPB1USART3_EN  = (1 << 18),
+    RccAPB1UART4_EN   = (1 << 19),
+    RccAPB1UART5_EN   = (1 << 20),
+    RccAPB1I2C1_EN    = (1 << 21),
+    RccAPB1I2C2_EN    = (1 << 22),
+    RccAPB1I2C3_EN    = (1 << 23),
+    RccAPB1FMPI2C1_EN = (1 << 24),
+    RccAPB1CAN1_EN    = (1 << 25),
+    RccAPB1CAN2_EN    = (1 << 26),
+    RccAPB1CEC_EN     = (1 << 27),
+    RccAPB1PWR_EN     = (1 << 28),
+    RccAPB1DAC_EN     = (1 << 29)
+} RccAPB1Control_t;
+
+typedef enum RccAPB2Control_e
+{
+    RccAPB2TIM1_EN   = 1,
+    RccAPB2TIM8_EN   = (1 << 1),
+    RccAPB2USART1_EN = (1 << 4),
+    RccAPB2USART6_EN = (1 << 5),
+    RccAPB2ADC1_EN   = (1 << 8),
+    RccAPB2ADC2_EN   = (1 << 9),
+    RccAPB2ADC3_EN   = (1 << 10),
+    RccAPB2SDIO_EN   = (1 << 11),
+    RccAPB2SPI1_EN   = (1 << 12),
+    RccAPB2SPI4_EN   = (1 << 13),
+    RccAPB2SYSCFG_EN = (1 << 14),
+    RccAPB2TIM9_EN   = (1 << 16),
+    RccAPB2TIM10_EN  = (1 << 17),
+    RccAPB2TIM11_EN  = (1 << 18),
+    RccAPB2SAI1_EN   = (1 << 22),
+    RccAPB2SAI2_EN   = (1 << 23)
+} RccAPB2Control_t;
+
 
 typedef enum RccClockControlHSI_e
 {
@@ -94,6 +144,10 @@ typedef struct RccClocksConfig_s
 /*Exposed API*/
 void rccEnableAHB1(RccAHB1Control_t bit);
 void rccDisableAHB1(RccAHB1Control_t bit);
+void rccEnableAPB1(RccAPB1Control_t bit);
+void rccDisableAPB1(RccAPB1Control_t bit);
+void rccEnableAPB2(RccAPB2Control_t bit);
+void rccDisableAPB2(RccAPB2Control_t bit);
 void rccClocksConfig(RccClocksConfig_t config);
 
 #endif

@@ -13,6 +13,7 @@
 #define RCC_RCC_CONTROL_AHB1_LOW_POWER_ENABLE (0x30 + RCC_RCC)
 #define RCC_RCC_CONTROL_CLOCK                 (0x00 + RCC_RCC)
 #define RCC_RCC_CONTROL_APB1_ENABLE           (0x40 + RCC_RCC)
+#define RCC_RCC_CONTROL_APB2_ENABLE           (0x44 + RCC_RCC)
 #define RCC_RCC_CONTROL_PLL_CONFIG            (0x04 + RCC_RCC)
 #define RCC_RCC_CONTROL_CLOCK_CONFIG          (0x08 + RCC_RCC)
 

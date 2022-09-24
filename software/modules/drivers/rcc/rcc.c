@@ -22,9 +22,27 @@ void rccEnableAHB1(RccAHB1Control_t bit)
     REG_VAL(RCC_RCC_CONTROL_AHB1_ENABLE) |= bit;
 }
 
-void DisableAHB1(RccAHB1Control_t bit)
+void rccDisableAHB1(RccAHB1Control_t bit)
 {
     REG_VAL(RCC_RCC_CONTROL_AHB1_ENABLE) &= ~bit;
+}
+
+void rccEnableAPB1(RccAPB1Control_t bit)
+{
+    REG_VAL(RCC_RCC_CONTROL_APB1_ENABLE) |= bit;
+}
+void rccDisableAPB1(RccAPB1Control_t bit)
+{
+    REG_VAL(RCC_RCC_CONTROL_APB1_ENABLE) &= ~bit;
+}
+
+void rccEnableAPB2(RccAPB2Control_t bit)
+{
+    REG_VAL(RCC_RCC_CONTROL_APB2_ENABLE) |= bit;
+}
+void rccDisableAPB2(RccAPB2Control_t bit)
+{
+    REG_VAL(RCC_RCC_CONTROL_APB2_ENABLE) &= ~bit;
 }
 
 void rccClocksConfig(RccClocksConfig_t config)
