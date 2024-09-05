@@ -1,2 +1,2 @@
 # STM32Drivers
-Simple drivers for STM32 without HAL
+Simple drivers for STM32 without HAL, based on register programming.
