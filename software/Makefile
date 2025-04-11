@@ -29,6 +29,9 @@ modules/drivers/gpio/gpio.c \
 modules/drivers/rcc/rcc.c \
 modules/drivers/flash/flash.c \
 modules/drivers/power/power.c \
+modules/drivers/interrupt/interrupt.c \
+modules/drivers/sysTick/sysTick.c \
+modules/drivers/syscfg/syscfg.c \
 application/config/config.c
 
 # ASM sources
@@ -88,8 +91,11 @@ C_INCLUDES = \
 -Imodules/drivers/rcc \
 -Imodules/drivers/flash \
 -Imodules/drivers/power \
--Iapplication/config 
-#-Imodules/drivers/CMSIS \
+-Imodules/drivers/syscfg \
+-Imodules/drivers/interrupt \
+-Imodules/drivers/sysTick \
+-Iapplication/config \
+-Imodules/external/CMSIS 
 
 
 

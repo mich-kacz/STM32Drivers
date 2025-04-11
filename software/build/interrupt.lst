@@ -1,0 +1,1105 @@
+ARM GAS  /tmp/cc5Wi5wf.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"interrupt.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.interruptSetEdge,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	interruptSetEdge:
+  26              	.LVL0:
+  27              	.LFB0:
+  28              		.file 1 "modules/drivers/interrupt/interrupt.c"
+   1:modules/drivers/interrupt/interrupt.c **** #include "interrupt.h"
+   2:modules/drivers/interrupt/interrupt.c **** 
+   3:modules/drivers/interrupt/interrupt.c **** #include <stdint.h>
+   4:modules/drivers/interrupt/interrupt.c **** 
+   5:modules/drivers/interrupt/interrupt.c **** #include "interruptRegisters.h"
+   6:modules/drivers/interrupt/interrupt.c **** #include "rcc.h"
+   7:modules/drivers/interrupt/interrupt.c **** 
+   8:modules/drivers/interrupt/interrupt.c **** #define REG_VAL(X) (*(volatile uint32_t*)X)
+   9:modules/drivers/interrupt/interrupt.c **** #define NVIC       ((NVIC_Type_t*)NVIC_BASE)
+  10:modules/drivers/interrupt/interrupt.c **** 
+  11:modules/drivers/interrupt/interrupt.c **** typedef struct NVIC_Type_s
+  12:modules/drivers/interrupt/interrupt.c **** {
+  13:modules/drivers/interrupt/interrupt.c ****     volatile uint32_t ISER[8U]; /*!< Offset: 0x000 (R/W)  Interrupt Set Enable Register */
+  14:modules/drivers/interrupt/interrupt.c ****     uint32_t RESERVED0[24U];
+  15:modules/drivers/interrupt/interrupt.c ****     volatile uint32_t ICER[8U]; /*!< Offset: 0x080 (R/W)  Interrupt Clear Enable Register
+  16:modules/drivers/interrupt/interrupt.c ****                                  */
+  17:modules/drivers/interrupt/interrupt.c ****     uint32_t RSERVED1[24U];
+  18:modules/drivers/interrupt/interrupt.c ****     volatile uint32_t ISPR[8U]; /*!< Offset: 0x100 (R/W)  Interrupt Set Pending Register
+  19:modules/drivers/interrupt/interrupt.c ****                                  */
+  20:modules/drivers/interrupt/interrupt.c ****     uint32_t RESERVED2[24U];
+  21:modules/drivers/interrupt/interrupt.c ****     volatile uint32_t ICPR[8U]; /*!< Offset: 0x180 (R/W)  Interrupt Clear Pending Register
+  22:modules/drivers/interrupt/interrupt.c ****                                  */
+  23:modules/drivers/interrupt/interrupt.c ****     uint32_t RESERVED3[24U];
+  24:modules/drivers/interrupt/interrupt.c ****     volatile uint32_t IABR[8U]; /*!< Offset: 0x200 (R/W)  Interrupt Active bit Register */
+  25:modules/drivers/interrupt/interrupt.c ****     uint32_t RESERVED4[56U];
+  26:modules/drivers/interrupt/interrupt.c ****     volatile uint8_t IP[240U]; /*!< Offset: 0x300 (R/W)  Interrupt Priority Register (8Bit
+  27:modules/drivers/interrupt/interrupt.c ****                                   wide) */
+  28:modules/drivers/interrupt/interrupt.c ****     uint32_t RESERVED5[644U];
+  29:modules/drivers/interrupt/interrupt.c ****     volatile uint32_t STIR; /*!< Offset: 0xE00 ( /W)  Software Trigger Interrupt Register
+  30:modules/drivers/interrupt/interrupt.c ****                              */
+ARM GAS  /tmp/cc5Wi5wf.s 			page 2
+
+
+  31:modules/drivers/interrupt/interrupt.c **** } NVIC_Type_t;
+  32:modules/drivers/interrupt/interrupt.c **** 
+  33:modules/drivers/interrupt/interrupt.c **** static void interruptSetEdge(uint8_t pinNumber, InterruptEXITEdgeDetection_t detection)
+  34:modules/drivers/interrupt/interrupt.c **** {
+  29              		.loc 1 34 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  35:modules/drivers/interrupt/interrupt.c ****     if (detection == EXTIFallingEdge)
+  34              		.loc 1 35 5 view .LVU1
+  35              		.loc 1 35 8 is_stmt 0 view .LVU2
+  36 0000 0B46     		mov	r3, r1
+  37 0002 61B9     		cbnz	r1, .L2
+  36:modules/drivers/interrupt/interrupt.c ****     {
+  37:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) &= ~(1 << pinNumber);
+  38              		.loc 1 37 9 is_stmt 1 view .LVU3
+  39              		.loc 1 37 28 is_stmt 0 view .LVU4
+  40 0004 0D49     		ldr	r1, .L5
+  41              	.LVL1:
+  42              		.loc 1 37 28 view .LVU5
+  43 0006 0A68     		ldr	r2, [r1]
+  44              		.loc 1 37 35 view .LVU6
+  45 0008 0123     		movs	r3, #1
+  46 000a 03FA00F0 		lsl	r0, r3, r0
+  47              	.LVL2:
+  48              		.loc 1 37 28 view .LVU7
+  49 000e 22EA0002 		bic	r2, r2, r0
+  50 0012 0A60     		str	r2, [r1]
+  38:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_FTSR) |= (1 << pinNumber);
+  51              		.loc 1 38 9 is_stmt 1 view .LVU8
+  52              		.loc 1 38 28 is_stmt 0 view .LVU9
+  53 0014 0A4A     		ldr	r2, .L5+4
+  54 0016 1368     		ldr	r3, [r2]
+  55 0018 1843     		orrs	r0, r0, r3
+  56 001a 1060     		str	r0, [r2]
+  57 001c 7047     		bx	lr
+  58              	.LVL3:
+  59              	.L2:
+  39:modules/drivers/interrupt/interrupt.c ****     }
+  40:modules/drivers/interrupt/interrupt.c ****     else if (detection == EXTIRisingEdge)
+  60              		.loc 1 40 10 is_stmt 1 view .LVU10
+  61              		.loc 1 40 13 is_stmt 0 view .LVU11
+  62 001e 0129     		cmp	r1, #1
+  63 0020 00D0     		beq	.L4
+  64              	.LVL4:
+  65              	.L1:
+  41:modules/drivers/interrupt/interrupt.c ****     {
+  42:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_FTSR) &= ~(1 << pinNumber);
+  43:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) |= (1 << pinNumber);
+  44:modules/drivers/interrupt/interrupt.c ****     }
+  45:modules/drivers/interrupt/interrupt.c **** }
+  66              		.loc 1 45 1 view .LVU12
+  67 0022 7047     		bx	lr
+  68              	.LVL5:
+  69              	.L4:
+  42:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) |= (1 << pinNumber);
+ARM GAS  /tmp/cc5Wi5wf.s 			page 3
+
+
+  70              		.loc 1 42 9 is_stmt 1 view .LVU13
+  42:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) |= (1 << pinNumber);
+  71              		.loc 1 42 28 is_stmt 0 view .LVU14
+  72 0024 0649     		ldr	r1, .L5+4
+  73              	.LVL6:
+  42:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) |= (1 << pinNumber);
+  74              		.loc 1 42 28 view .LVU15
+  75 0026 0A68     		ldr	r2, [r1]
+  42:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) |= (1 << pinNumber);
+  76              		.loc 1 42 35 view .LVU16
+  77 0028 03FA00F0 		lsl	r0, r3, r0
+  78              	.LVL7:
+  42:modules/drivers/interrupt/interrupt.c ****         REG_VAL(EXTI_RTSR) |= (1 << pinNumber);
+  79              		.loc 1 42 28 view .LVU17
+  80 002c 22EA0002 		bic	r2, r2, r0
+  81 0030 0A60     		str	r2, [r1]
+  43:modules/drivers/interrupt/interrupt.c ****     }
+  82              		.loc 1 43 9 is_stmt 1 view .LVU18
+  43:modules/drivers/interrupt/interrupt.c ****     }
+  83              		.loc 1 43 28 is_stmt 0 view .LVU19
+  84 0032 024A     		ldr	r2, .L5
+  85 0034 1368     		ldr	r3, [r2]
+  86 0036 1843     		orrs	r0, r0, r3
+  87 0038 1060     		str	r0, [r2]
+  88              		.loc 1 45 1 view .LVU20
+  89 003a F2E7     		b	.L1
+  90              	.L6:
+  91              		.align	2
+  92              	.L5:
+  93 003c 083C0140 		.word	1073822728
+  94 0040 0C3C0140 		.word	1073822732
+  95              		.cfi_endproc
+  96              	.LFE0:
+  98              		.section	.text.interruptNVICSetPriority,"ax",%progbits
+  99              		.align	1
+ 100              		.syntax unified
+ 101              		.thumb
+ 102              		.thumb_func
+ 103              		.fpu fpv4-sp-d16
+ 105              	interruptNVICSetPriority:
+ 106              	.LVL8:
+ 107              	.LFB1:
+  46:modules/drivers/interrupt/interrupt.c **** 
+  47:modules/drivers/interrupt/interrupt.c **** static void interruptNVICSetPriority(uint8_t position, uint8_t priority)
+  48:modules/drivers/interrupt/interrupt.c **** {
+ 108              		.loc 1 48 1 is_stmt 1 view -0
+ 109              		.cfi_startproc
+ 110              		@ args = 0, pretend = 0, frame = 0
+ 111              		@ frame_needed = 0, uses_anonymous_args = 0
+ 112              		@ link register save eliminated.
+  49:modules/drivers/interrupt/interrupt.c ****     if ((int32_t)(position) >= 0)
+ 113              		.loc 1 49 5 view .LVU22
+  50:modules/drivers/interrupt/interrupt.c ****     {
+  51:modules/drivers/interrupt/interrupt.c ****         NVIC->IP[((uint32_t)position)] = (uint8_t)((priority << (4U)) & (uint32_t)0xFFUL);
+ 114              		.loc 1 51 9 view .LVU23
+ 115              		.loc 1 51 42 is_stmt 0 view .LVU24
+ 116 0000 0901     		lsls	r1, r1, #4
+ARM GAS  /tmp/cc5Wi5wf.s 			page 4
+
+
+ 117              	.LVL9:
+ 118              		.loc 1 51 42 view .LVU25
+ 119 0002 C9B2     		uxtb	r1, r1
+ 120              		.loc 1 51 40 view .LVU26
+ 121 0004 00F16040 		add	r0, r0, #-536870912
+ 122              	.LVL10:
+ 123              		.loc 1 51 40 view .LVU27
+ 124 0008 00F56140 		add	r0, r0, #57600
+ 125 000c 80F80013 		strb	r1, [r0, #768]
+  52:modules/drivers/interrupt/interrupt.c ****     }
+  53:modules/drivers/interrupt/interrupt.c **** }
+ 126              		.loc 1 53 1 view .LVU28
+ 127 0010 7047     		bx	lr
+ 128              		.cfi_endproc
+ 129              	.LFE1:
+ 131              		.section	.text.interruptNVICEnableIRQ,"ax",%progbits
+ 132              		.align	1
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 136              		.fpu fpv4-sp-d16
+ 138              	interruptNVICEnableIRQ:
+ 139              	.LVL11:
+ 140              	.LFB2:
+  54:modules/drivers/interrupt/interrupt.c **** 
+  55:modules/drivers/interrupt/interrupt.c **** static void interruptNVICEnableIRQ(uint8_t position)
+  56:modules/drivers/interrupt/interrupt.c **** {
+ 141              		.loc 1 56 1 is_stmt 1 view -0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              		@ link register save eliminated.
+  57:modules/drivers/interrupt/interrupt.c ****     if ((int32_t)(position) >= 0)
+ 146              		.loc 1 57 5 view .LVU30
+  58:modules/drivers/interrupt/interrupt.c ****     {
+  59:modules/drivers/interrupt/interrupt.c ****         NVIC->ISER[(((uint32_t)position) >> 5UL)] =
+ 147              		.loc 1 59 9 view .LVU31
+  60:modules/drivers/interrupt/interrupt.c ****             (uint32_t)(1UL << (((uint32_t)position) & 0x1FUL));
+ 148              		.loc 1 60 53 is_stmt 0 view .LVU32
+ 149 0000 00F01F02 		and	r2, r0, #31
+  59:modules/drivers/interrupt/interrupt.c ****             (uint32_t)(1UL << (((uint32_t)position) & 0x1FUL));
+ 150              		.loc 1 59 42 view .LVU33
+ 151 0004 4009     		lsrs	r0, r0, #5
+ 152              	.LVL12:
+ 153              		.loc 1 60 13 view .LVU34
+ 154 0006 0123     		movs	r3, #1
+ 155 0008 9340     		lsls	r3, r3, r2
+  59:modules/drivers/interrupt/interrupt.c ****             (uint32_t)(1UL << (((uint32_t)position) & 0x1FUL));
+ 156              		.loc 1 59 51 view .LVU35
+ 157 000a 024A     		ldr	r2, .L9
+ 158 000c 42F82030 		str	r3, [r2, r0, lsl #2]
+  61:modules/drivers/interrupt/interrupt.c ****     }
+  62:modules/drivers/interrupt/interrupt.c **** }
+ 159              		.loc 1 62 1 view .LVU36
+ 160 0010 7047     		bx	lr
+ 161              	.L10:
+ 162 0012 00BF     		.align	2
+ARM GAS  /tmp/cc5Wi5wf.s 			page 5
+
+
+ 163              	.L9:
+ 164 0014 00E100E0 		.word	-536813312
+ 165              		.cfi_endproc
+ 166              	.LFE2:
+ 168              		.section	.text.interruptEnableEXTI,"ax",%progbits
+ 169              		.align	1
+ 170              		.global	interruptEnableEXTI
+ 171              		.syntax unified
+ 172              		.thumb
+ 173              		.thumb_func
+ 174              		.fpu fpv4-sp-d16
+ 176              	interruptEnableEXTI:
+ 177              	.LVL13:
+ 178              	.LFB3:
+  63:modules/drivers/interrupt/interrupt.c **** 
+  64:modules/drivers/interrupt/interrupt.c **** 
+  65:modules/drivers/interrupt/interrupt.c **** void interruptEnableEXTI(
+  66:modules/drivers/interrupt/interrupt.c ****     Syscfg_EXTICRx_Control_t number,
+  67:modules/drivers/interrupt/interrupt.c ****     Syscfg_EXTICRx_Config_t bus,
+  68:modules/drivers/interrupt/interrupt.c ****     InterruptEXITEdgeDetection_t detection,
+  69:modules/drivers/interrupt/interrupt.c ****     uint8_t priority)
+  70:modules/drivers/interrupt/interrupt.c **** {
+ 179              		.loc 1 70 1 is_stmt 1 view -0
+ 180              		.cfi_startproc
+ 181              		@ args = 0, pretend = 0, frame = 0
+ 182              		@ frame_needed = 0, uses_anonymous_args = 0
+ 183              		.loc 1 70 1 is_stmt 0 view .LVU38
+ 184 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 185              	.LCFI0:
+ 186              		.cfi_def_cfa_offset 24
+ 187              		.cfi_offset 3, -24
+ 188              		.cfi_offset 4, -20
+ 189              		.cfi_offset 5, -16
+ 190              		.cfi_offset 6, -12
+ 191              		.cfi_offset 7, -8
+ 192              		.cfi_offset 14, -4
+ 193 0002 0446     		mov	r4, r0
+ 194 0004 0D46     		mov	r5, r1
+ 195 0006 1746     		mov	r7, r2
+ 196 0008 1E46     		mov	r6, r3
+  71:modules/drivers/interrupt/interrupt.c ****     rccEnableAPB2(RccAPB2SYSCFG_EN);
+ 197              		.loc 1 71 5 is_stmt 1 view .LVU39
+ 198 000a 4FF48040 		mov	r0, #16384
+ 199              	.LVL14:
+ 200              		.loc 1 71 5 is_stmt 0 view .LVU40
+ 201 000e FFF7FEFF 		bl	rccEnableAPB2
+ 202              	.LVL15:
+  72:modules/drivers/interrupt/interrupt.c ****     syscfgEXTI(number, bus);
+ 203              		.loc 1 72 5 is_stmt 1 view .LVU41
+ 204 0012 2946     		mov	r1, r5
+ 205 0014 2046     		mov	r0, r4
+ 206 0016 FFF7FEFF 		bl	syscfgEXTI
+ 207              	.LVL16:
+  73:modules/drivers/interrupt/interrupt.c **** 
+  74:modules/drivers/interrupt/interrupt.c ****     switch (number)
+ 208              		.loc 1 74 5 view .LVU42
+ 209 001a 0F2C     		cmp	r4, #15
+ARM GAS  /tmp/cc5Wi5wf.s 			page 6
+
+
+ 210 001c 21D8     		bhi	.L11
+ 211 001e DFE814F0 		tbh	[pc, r4, lsl #1]
+ 212              	.L14:
+ 213 0022 1000     		.2byte	(.L29-.L14)/2
+ 214 0024 2100     		.2byte	(.L28-.L14)/2
+ 215 0026 3200     		.2byte	(.L27-.L14)/2
+ 216 0028 4300     		.2byte	(.L26-.L14)/2
+ 217 002a 5400     		.2byte	(.L25-.L14)/2
+ 218 002c 6500     		.2byte	(.L24-.L14)/2
+ 219 002e 7600     		.2byte	(.L23-.L14)/2
+ 220 0030 8700     		.2byte	(.L22-.L14)/2
+ 221 0032 9800     		.2byte	(.L21-.L14)/2
+ 222 0034 A900     		.2byte	(.L20-.L14)/2
+ 223 0036 BA00     		.2byte	(.L19-.L14)/2
+ 224 0038 CB00     		.2byte	(.L18-.L14)/2
+ 225 003a DC00     		.2byte	(.L17-.L14)/2
+ 226 003c ED00     		.2byte	(.L16-.L14)/2
+ 227 003e FE00     		.2byte	(.L15-.L14)/2
+ 228 0040 0F01     		.2byte	(.L13-.L14)/2
+ 229              		.p2align 1
+ 230              	.L29:
+  75:modules/drivers/interrupt/interrupt.c ****     {
+  76:modules/drivers/interrupt/interrupt.c ****         case EXTI0:
+  77:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 0);
+ 231              		.loc 1 77 13 view .LVU43
+ 232              		.loc 1 77 31 is_stmt 0 view .LVU44
+ 233 0042 884A     		ldr	r2, .L31
+ 234 0044 1368     		ldr	r3, [r2]
+ 235 0046 43F00103 		orr	r3, r3, #1
+ 236 004a 1360     		str	r3, [r2]
+  78:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(0, detection);
+ 237              		.loc 1 78 13 is_stmt 1 view .LVU45
+ 238 004c 3946     		mov	r1, r7
+ 239 004e 0020     		movs	r0, #0
+ 240 0050 FFF7FEFF 		bl	interruptSetEdge
+ 241              	.LVL17:
+  79:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(6, priority);
+ 242              		.loc 1 79 13 view .LVU46
+ 243 0054 3146     		mov	r1, r6
+ 244 0056 0620     		movs	r0, #6
+ 245 0058 FFF7FEFF 		bl	interruptNVICSetPriority
+ 246              	.LVL18:
+  80:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(6);
+ 247              		.loc 1 80 13 view .LVU47
+ 248 005c 0620     		movs	r0, #6
+ 249 005e FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 250              	.LVL19:
+  81:modules/drivers/interrupt/interrupt.c ****             break;
+ 251              		.loc 1 81 13 view .LVU48
+ 252              	.L11:
+  82:modules/drivers/interrupt/interrupt.c ****         case EXTI4:
+  83:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 4);
+  84:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(4, detection);
+  85:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(10, priority);
+  86:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(10);
+  87:modules/drivers/interrupt/interrupt.c ****             break;
+  88:modules/drivers/interrupt/interrupt.c ****         case EXTI8:
+ARM GAS  /tmp/cc5Wi5wf.s 			page 7
+
+
+  89:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 8);
+  90:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(8, detection);
+  91:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+  92:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+  93:modules/drivers/interrupt/interrupt.c ****             break;
+  94:modules/drivers/interrupt/interrupt.c ****         case EXTI12:
+  95:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 12);
+  96:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(12, detection);
+  97:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+  98:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+  99:modules/drivers/interrupt/interrupt.c ****             break;
+ 100:modules/drivers/interrupt/interrupt.c ****         case EXTI1:
+ 101:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 1);
+ 102:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(1, detection);
+ 103:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(7, priority);
+ 104:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(7);
+ 105:modules/drivers/interrupt/interrupt.c ****             break;
+ 106:modules/drivers/interrupt/interrupt.c ****         case EXTI5:
+ 107:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 5);
+ 108:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(5, detection);
+ 109:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 110:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 111:modules/drivers/interrupt/interrupt.c ****             break;
+ 112:modules/drivers/interrupt/interrupt.c ****         case EXTI9:
+ 113:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 9);
+ 114:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(9, detection);
+ 115:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 116:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 117:modules/drivers/interrupt/interrupt.c ****             break;
+ 118:modules/drivers/interrupt/interrupt.c ****         case EXTI13:
+ 119:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 13);
+ 120:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(13, detection);
+ 121:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 122:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 123:modules/drivers/interrupt/interrupt.c ****             break;
+ 124:modules/drivers/interrupt/interrupt.c ****         case EXTI2:
+ 125:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 2);
+ 126:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(2, detection);
+ 127:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(8, priority);
+ 128:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(8);
+ 129:modules/drivers/interrupt/interrupt.c ****             break;
+ 130:modules/drivers/interrupt/interrupt.c ****         case EXTI6:
+ 131:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 6);
+ 132:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(6, detection);
+ 133:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 134:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 135:modules/drivers/interrupt/interrupt.c ****             break;
+ 136:modules/drivers/interrupt/interrupt.c ****         case EXTI10:
+ 137:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 10);
+ 138:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(10, detection);
+ 139:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 140:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 141:modules/drivers/interrupt/interrupt.c ****             break;
+ 142:modules/drivers/interrupt/interrupt.c ****         case EXTI14:
+ 143:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 14);
+ 144:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(14, detection);
+ 145:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ARM GAS  /tmp/cc5Wi5wf.s 			page 8
+
+
+ 146:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 147:modules/drivers/interrupt/interrupt.c ****             break;
+ 148:modules/drivers/interrupt/interrupt.c ****         case EXTI3:
+ 149:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 3);
+ 150:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(3, detection);
+ 151:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(9, priority);
+ 152:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(9);
+ 153:modules/drivers/interrupt/interrupt.c ****             break;
+ 154:modules/drivers/interrupt/interrupt.c ****         case EXTI7:
+ 155:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 7);
+ 156:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(7, detection);
+ 157:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 158:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 159:modules/drivers/interrupt/interrupt.c ****             break;
+ 160:modules/drivers/interrupt/interrupt.c ****         case EXTI11:
+ 161:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 11);
+ 162:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(11, detection);
+ 163:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 164:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 165:modules/drivers/interrupt/interrupt.c ****             break;
+ 166:modules/drivers/interrupt/interrupt.c ****         case EXTI15:
+ 167:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_IMR) |= (1 << 15);
+ 168:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(15, detection);
+ 169:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 170:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 171:modules/drivers/interrupt/interrupt.c ****             break;
+ 172:modules/drivers/interrupt/interrupt.c ****         default:
+ 173:modules/drivers/interrupt/interrupt.c ****             break;
+ 174:modules/drivers/interrupt/interrupt.c ****     }
+ 175:modules/drivers/interrupt/interrupt.c **** }
+ 253              		.loc 1 175 1 is_stmt 0 view .LVU49
+ 254 0062 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 255              	.L28:
+  83:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(4, detection);
+ 256              		.loc 1 83 13 is_stmt 1 view .LVU50
+  83:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(4, detection);
+ 257              		.loc 1 83 31 is_stmt 0 view .LVU51
+ 258 0064 7F4A     		ldr	r2, .L31
+ 259 0066 1368     		ldr	r3, [r2]
+ 260 0068 43F01003 		orr	r3, r3, #16
+ 261 006c 1360     		str	r3, [r2]
+  84:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(10, priority);
+ 262              		.loc 1 84 13 is_stmt 1 view .LVU52
+ 263 006e 3946     		mov	r1, r7
+ 264 0070 0420     		movs	r0, #4
+ 265 0072 FFF7FEFF 		bl	interruptSetEdge
+ 266              	.LVL20:
+  85:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(10);
+ 267              		.loc 1 85 13 view .LVU53
+ 268 0076 3146     		mov	r1, r6
+ 269 0078 0A20     		movs	r0, #10
+ 270 007a FFF7FEFF 		bl	interruptNVICSetPriority
+ 271              	.LVL21:
+  86:modules/drivers/interrupt/interrupt.c ****             break;
+ 272              		.loc 1 86 13 view .LVU54
+ 273 007e 0A20     		movs	r0, #10
+ 274 0080 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ARM GAS  /tmp/cc5Wi5wf.s 			page 9
+
+
+ 275              	.LVL22:
+  87:modules/drivers/interrupt/interrupt.c ****         case EXTI8:
+ 276              		.loc 1 87 13 view .LVU55
+ 277 0084 EDE7     		b	.L11
+ 278              	.L27:
+  89:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(8, detection);
+ 279              		.loc 1 89 13 view .LVU56
+  89:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(8, detection);
+ 280              		.loc 1 89 31 is_stmt 0 view .LVU57
+ 281 0086 774A     		ldr	r2, .L31
+ 282 0088 1368     		ldr	r3, [r2]
+ 283 008a 43F48073 		orr	r3, r3, #256
+ 284 008e 1360     		str	r3, [r2]
+  90:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 285              		.loc 1 90 13 is_stmt 1 view .LVU58
+ 286 0090 3946     		mov	r1, r7
+ 287 0092 0820     		movs	r0, #8
+ 288 0094 FFF7FEFF 		bl	interruptSetEdge
+ 289              	.LVL23:
+  91:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 290              		.loc 1 91 13 view .LVU59
+ 291 0098 3146     		mov	r1, r6
+ 292 009a 1720     		movs	r0, #23
+ 293 009c FFF7FEFF 		bl	interruptNVICSetPriority
+ 294              	.LVL24:
+  92:modules/drivers/interrupt/interrupt.c ****             break;
+ 295              		.loc 1 92 13 view .LVU60
+ 296 00a0 1720     		movs	r0, #23
+ 297 00a2 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 298              	.LVL25:
+  93:modules/drivers/interrupt/interrupt.c ****         case EXTI12:
+ 299              		.loc 1 93 13 view .LVU61
+ 300 00a6 DCE7     		b	.L11
+ 301              	.L26:
+  95:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(12, detection);
+ 302              		.loc 1 95 13 view .LVU62
+  95:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(12, detection);
+ 303              		.loc 1 95 31 is_stmt 0 view .LVU63
+ 304 00a8 6E4A     		ldr	r2, .L31
+ 305 00aa 1368     		ldr	r3, [r2]
+ 306 00ac 43F48053 		orr	r3, r3, #4096
+ 307 00b0 1360     		str	r3, [r2]
+  96:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 308              		.loc 1 96 13 is_stmt 1 view .LVU64
+ 309 00b2 3946     		mov	r1, r7
+ 310 00b4 0C20     		movs	r0, #12
+ 311 00b6 FFF7FEFF 		bl	interruptSetEdge
+ 312              	.LVL26:
+  97:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 313              		.loc 1 97 13 view .LVU65
+ 314 00ba 3146     		mov	r1, r6
+ 315 00bc 2820     		movs	r0, #40
+ 316 00be FFF7FEFF 		bl	interruptNVICSetPriority
+ 317              	.LVL27:
+  98:modules/drivers/interrupt/interrupt.c ****             break;
+ 318              		.loc 1 98 13 view .LVU66
+ 319 00c2 2820     		movs	r0, #40
+ARM GAS  /tmp/cc5Wi5wf.s 			page 10
+
+
+ 320 00c4 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 321              	.LVL28:
+  99:modules/drivers/interrupt/interrupt.c ****         case EXTI1:
+ 322              		.loc 1 99 13 view .LVU67
+ 323 00c8 CBE7     		b	.L11
+ 324              	.L25:
+ 101:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(1, detection);
+ 325              		.loc 1 101 13 view .LVU68
+ 101:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(1, detection);
+ 326              		.loc 1 101 31 is_stmt 0 view .LVU69
+ 327 00ca 664A     		ldr	r2, .L31
+ 328 00cc 1368     		ldr	r3, [r2]
+ 329 00ce 43F00203 		orr	r3, r3, #2
+ 330 00d2 1360     		str	r3, [r2]
+ 102:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(7, priority);
+ 331              		.loc 1 102 13 is_stmt 1 view .LVU70
+ 332 00d4 3946     		mov	r1, r7
+ 333 00d6 0120     		movs	r0, #1
+ 334 00d8 FFF7FEFF 		bl	interruptSetEdge
+ 335              	.LVL29:
+ 103:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(7);
+ 336              		.loc 1 103 13 view .LVU71
+ 337 00dc 3146     		mov	r1, r6
+ 338 00de 0720     		movs	r0, #7
+ 339 00e0 FFF7FEFF 		bl	interruptNVICSetPriority
+ 340              	.LVL30:
+ 104:modules/drivers/interrupt/interrupt.c ****             break;
+ 341              		.loc 1 104 13 view .LVU72
+ 342 00e4 0720     		movs	r0, #7
+ 343 00e6 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 344              	.LVL31:
+ 105:modules/drivers/interrupt/interrupt.c ****         case EXTI5:
+ 345              		.loc 1 105 13 view .LVU73
+ 346 00ea BAE7     		b	.L11
+ 347              	.L24:
+ 107:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(5, detection);
+ 348              		.loc 1 107 13 view .LVU74
+ 107:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(5, detection);
+ 349              		.loc 1 107 31 is_stmt 0 view .LVU75
+ 350 00ec 5D4A     		ldr	r2, .L31
+ 351 00ee 1368     		ldr	r3, [r2]
+ 352 00f0 43F02003 		orr	r3, r3, #32
+ 353 00f4 1360     		str	r3, [r2]
+ 108:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 354              		.loc 1 108 13 is_stmt 1 view .LVU76
+ 355 00f6 3946     		mov	r1, r7
+ 356 00f8 0520     		movs	r0, #5
+ 357 00fa FFF7FEFF 		bl	interruptSetEdge
+ 358              	.LVL32:
+ 109:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 359              		.loc 1 109 13 view .LVU77
+ 360 00fe 3146     		mov	r1, r6
+ 361 0100 1720     		movs	r0, #23
+ 362 0102 FFF7FEFF 		bl	interruptNVICSetPriority
+ 363              	.LVL33:
+ 110:modules/drivers/interrupt/interrupt.c ****             break;
+ 364              		.loc 1 110 13 view .LVU78
+ARM GAS  /tmp/cc5Wi5wf.s 			page 11
+
+
+ 365 0106 1720     		movs	r0, #23
+ 366 0108 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 367              	.LVL34:
+ 111:modules/drivers/interrupt/interrupt.c ****         case EXTI9:
+ 368              		.loc 1 111 13 view .LVU79
+ 369 010c A9E7     		b	.L11
+ 370              	.L23:
+ 113:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(9, detection);
+ 371              		.loc 1 113 13 view .LVU80
+ 113:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(9, detection);
+ 372              		.loc 1 113 31 is_stmt 0 view .LVU81
+ 373 010e 554A     		ldr	r2, .L31
+ 374 0110 1368     		ldr	r3, [r2]
+ 375 0112 43F40073 		orr	r3, r3, #512
+ 376 0116 1360     		str	r3, [r2]
+ 114:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 377              		.loc 1 114 13 is_stmt 1 view .LVU82
+ 378 0118 3946     		mov	r1, r7
+ 379 011a 0920     		movs	r0, #9
+ 380 011c FFF7FEFF 		bl	interruptSetEdge
+ 381              	.LVL35:
+ 115:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 382              		.loc 1 115 13 view .LVU83
+ 383 0120 3146     		mov	r1, r6
+ 384 0122 1720     		movs	r0, #23
+ 385 0124 FFF7FEFF 		bl	interruptNVICSetPriority
+ 386              	.LVL36:
+ 116:modules/drivers/interrupt/interrupt.c ****             break;
+ 387              		.loc 1 116 13 view .LVU84
+ 388 0128 1720     		movs	r0, #23
+ 389 012a FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 390              	.LVL37:
+ 117:modules/drivers/interrupt/interrupt.c ****         case EXTI13:
+ 391              		.loc 1 117 13 view .LVU85
+ 392 012e 98E7     		b	.L11
+ 393              	.L22:
+ 119:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(13, detection);
+ 394              		.loc 1 119 13 view .LVU86
+ 119:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(13, detection);
+ 395              		.loc 1 119 31 is_stmt 0 view .LVU87
+ 396 0130 4C4A     		ldr	r2, .L31
+ 397 0132 1368     		ldr	r3, [r2]
+ 398 0134 43F40053 		orr	r3, r3, #8192
+ 399 0138 1360     		str	r3, [r2]
+ 120:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 400              		.loc 1 120 13 is_stmt 1 view .LVU88
+ 401 013a 3946     		mov	r1, r7
+ 402 013c 0D20     		movs	r0, #13
+ 403 013e FFF7FEFF 		bl	interruptSetEdge
+ 404              	.LVL38:
+ 121:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 405              		.loc 1 121 13 view .LVU89
+ 406 0142 3146     		mov	r1, r6
+ 407 0144 2820     		movs	r0, #40
+ 408 0146 FFF7FEFF 		bl	interruptNVICSetPriority
+ 409              	.LVL39:
+ 122:modules/drivers/interrupt/interrupt.c ****             break;
+ARM GAS  /tmp/cc5Wi5wf.s 			page 12
+
+
+ 410              		.loc 1 122 13 view .LVU90
+ 411 014a 2820     		movs	r0, #40
+ 412 014c FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 413              	.LVL40:
+ 123:modules/drivers/interrupt/interrupt.c ****         case EXTI2:
+ 414              		.loc 1 123 13 view .LVU91
+ 415 0150 87E7     		b	.L11
+ 416              	.L21:
+ 125:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(2, detection);
+ 417              		.loc 1 125 13 view .LVU92
+ 125:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(2, detection);
+ 418              		.loc 1 125 31 is_stmt 0 view .LVU93
+ 419 0152 444A     		ldr	r2, .L31
+ 420 0154 1368     		ldr	r3, [r2]
+ 421 0156 43F00403 		orr	r3, r3, #4
+ 422 015a 1360     		str	r3, [r2]
+ 126:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(8, priority);
+ 423              		.loc 1 126 13 is_stmt 1 view .LVU94
+ 424 015c 3946     		mov	r1, r7
+ 425 015e 0220     		movs	r0, #2
+ 426 0160 FFF7FEFF 		bl	interruptSetEdge
+ 427              	.LVL41:
+ 127:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(8);
+ 428              		.loc 1 127 13 view .LVU95
+ 429 0164 3146     		mov	r1, r6
+ 430 0166 0820     		movs	r0, #8
+ 431 0168 FFF7FEFF 		bl	interruptNVICSetPriority
+ 432              	.LVL42:
+ 128:modules/drivers/interrupt/interrupt.c ****             break;
+ 433              		.loc 1 128 13 view .LVU96
+ 434 016c 0820     		movs	r0, #8
+ 435 016e FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 436              	.LVL43:
+ 129:modules/drivers/interrupt/interrupt.c ****         case EXTI6:
+ 437              		.loc 1 129 13 view .LVU97
+ 438 0172 76E7     		b	.L11
+ 439              	.L20:
+ 131:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(6, detection);
+ 440              		.loc 1 131 13 view .LVU98
+ 131:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(6, detection);
+ 441              		.loc 1 131 31 is_stmt 0 view .LVU99
+ 442 0174 3B4A     		ldr	r2, .L31
+ 443 0176 1368     		ldr	r3, [r2]
+ 444 0178 43F04003 		orr	r3, r3, #64
+ 445 017c 1360     		str	r3, [r2]
+ 132:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 446              		.loc 1 132 13 is_stmt 1 view .LVU100
+ 447 017e 3946     		mov	r1, r7
+ 448 0180 0620     		movs	r0, #6
+ 449 0182 FFF7FEFF 		bl	interruptSetEdge
+ 450              	.LVL44:
+ 133:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 451              		.loc 1 133 13 view .LVU101
+ 452 0186 3146     		mov	r1, r6
+ 453 0188 1720     		movs	r0, #23
+ 454 018a FFF7FEFF 		bl	interruptNVICSetPriority
+ 455              	.LVL45:
+ARM GAS  /tmp/cc5Wi5wf.s 			page 13
+
+
+ 134:modules/drivers/interrupt/interrupt.c ****             break;
+ 456              		.loc 1 134 13 view .LVU102
+ 457 018e 1720     		movs	r0, #23
+ 458 0190 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 459              	.LVL46:
+ 135:modules/drivers/interrupt/interrupt.c ****         case EXTI10:
+ 460              		.loc 1 135 13 view .LVU103
+ 461 0194 65E7     		b	.L11
+ 462              	.L19:
+ 137:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(10, detection);
+ 463              		.loc 1 137 13 view .LVU104
+ 137:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(10, detection);
+ 464              		.loc 1 137 31 is_stmt 0 view .LVU105
+ 465 0196 334A     		ldr	r2, .L31
+ 466 0198 1368     		ldr	r3, [r2]
+ 467 019a 43F48063 		orr	r3, r3, #1024
+ 468 019e 1360     		str	r3, [r2]
+ 138:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 469              		.loc 1 138 13 is_stmt 1 view .LVU106
+ 470 01a0 3946     		mov	r1, r7
+ 471 01a2 0A20     		movs	r0, #10
+ 472 01a4 FFF7FEFF 		bl	interruptSetEdge
+ 473              	.LVL47:
+ 139:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 474              		.loc 1 139 13 view .LVU107
+ 475 01a8 3146     		mov	r1, r6
+ 476 01aa 2820     		movs	r0, #40
+ 477 01ac FFF7FEFF 		bl	interruptNVICSetPriority
+ 478              	.LVL48:
+ 140:modules/drivers/interrupt/interrupt.c ****             break;
+ 479              		.loc 1 140 13 view .LVU108
+ 480 01b0 2820     		movs	r0, #40
+ 481 01b2 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 482              	.LVL49:
+ 141:modules/drivers/interrupt/interrupt.c ****         case EXTI14:
+ 483              		.loc 1 141 13 view .LVU109
+ 484 01b6 54E7     		b	.L11
+ 485              	.L18:
+ 143:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(14, detection);
+ 486              		.loc 1 143 13 view .LVU110
+ 143:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(14, detection);
+ 487              		.loc 1 143 31 is_stmt 0 view .LVU111
+ 488 01b8 2A4A     		ldr	r2, .L31
+ 489 01ba 1368     		ldr	r3, [r2]
+ 490 01bc 43F48043 		orr	r3, r3, #16384
+ 491 01c0 1360     		str	r3, [r2]
+ 144:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 492              		.loc 1 144 13 is_stmt 1 view .LVU112
+ 493 01c2 3946     		mov	r1, r7
+ 494 01c4 0E20     		movs	r0, #14
+ 495 01c6 FFF7FEFF 		bl	interruptSetEdge
+ 496              	.LVL50:
+ 145:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 497              		.loc 1 145 13 view .LVU113
+ 498 01ca 3146     		mov	r1, r6
+ 499 01cc 2820     		movs	r0, #40
+ 500 01ce FFF7FEFF 		bl	interruptNVICSetPriority
+ARM GAS  /tmp/cc5Wi5wf.s 			page 14
+
+
+ 501              	.LVL51:
+ 146:modules/drivers/interrupt/interrupt.c ****             break;
+ 502              		.loc 1 146 13 view .LVU114
+ 503 01d2 2820     		movs	r0, #40
+ 504 01d4 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 505              	.LVL52:
+ 147:modules/drivers/interrupt/interrupt.c ****         case EXTI3:
+ 506              		.loc 1 147 13 view .LVU115
+ 507 01d8 43E7     		b	.L11
+ 508              	.L17:
+ 149:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(3, detection);
+ 509              		.loc 1 149 13 view .LVU116
+ 149:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(3, detection);
+ 510              		.loc 1 149 31 is_stmt 0 view .LVU117
+ 511 01da 224A     		ldr	r2, .L31
+ 512 01dc 1368     		ldr	r3, [r2]
+ 513 01de 43F00803 		orr	r3, r3, #8
+ 514 01e2 1360     		str	r3, [r2]
+ 150:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(9, priority);
+ 515              		.loc 1 150 13 is_stmt 1 view .LVU118
+ 516 01e4 3946     		mov	r1, r7
+ 517 01e6 0320     		movs	r0, #3
+ 518 01e8 FFF7FEFF 		bl	interruptSetEdge
+ 519              	.LVL53:
+ 151:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(9);
+ 520              		.loc 1 151 13 view .LVU119
+ 521 01ec 3146     		mov	r1, r6
+ 522 01ee 0920     		movs	r0, #9
+ 523 01f0 FFF7FEFF 		bl	interruptNVICSetPriority
+ 524              	.LVL54:
+ 152:modules/drivers/interrupt/interrupt.c ****             break;
+ 525              		.loc 1 152 13 view .LVU120
+ 526 01f4 0920     		movs	r0, #9
+ 527 01f6 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 528              	.LVL55:
+ 153:modules/drivers/interrupt/interrupt.c ****         case EXTI7:
+ 529              		.loc 1 153 13 view .LVU121
+ 530 01fa 32E7     		b	.L11
+ 531              	.L16:
+ 155:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(7, detection);
+ 532              		.loc 1 155 13 view .LVU122
+ 155:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(7, detection);
+ 533              		.loc 1 155 31 is_stmt 0 view .LVU123
+ 534 01fc 194A     		ldr	r2, .L31
+ 535 01fe 1368     		ldr	r3, [r2]
+ 536 0200 43F08003 		orr	r3, r3, #128
+ 537 0204 1360     		str	r3, [r2]
+ 156:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(23, priority);
+ 538              		.loc 1 156 13 is_stmt 1 view .LVU124
+ 539 0206 3946     		mov	r1, r7
+ 540 0208 0720     		movs	r0, #7
+ 541 020a FFF7FEFF 		bl	interruptSetEdge
+ 542              	.LVL56:
+ 157:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(23);
+ 543              		.loc 1 157 13 view .LVU125
+ 544 020e 3146     		mov	r1, r6
+ 545 0210 1720     		movs	r0, #23
+ARM GAS  /tmp/cc5Wi5wf.s 			page 15
+
+
+ 546 0212 FFF7FEFF 		bl	interruptNVICSetPriority
+ 547              	.LVL57:
+ 158:modules/drivers/interrupt/interrupt.c ****             break;
+ 548              		.loc 1 158 13 view .LVU126
+ 549 0216 1720     		movs	r0, #23
+ 550 0218 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 551              	.LVL58:
+ 159:modules/drivers/interrupt/interrupt.c ****         case EXTI11:
+ 552              		.loc 1 159 13 view .LVU127
+ 553 021c 21E7     		b	.L11
+ 554              	.L15:
+ 161:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(11, detection);
+ 555              		.loc 1 161 13 view .LVU128
+ 161:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(11, detection);
+ 556              		.loc 1 161 31 is_stmt 0 view .LVU129
+ 557 021e 114A     		ldr	r2, .L31
+ 558 0220 1368     		ldr	r3, [r2]
+ 559 0222 43F40063 		orr	r3, r3, #2048
+ 560 0226 1360     		str	r3, [r2]
+ 162:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 561              		.loc 1 162 13 is_stmt 1 view .LVU130
+ 562 0228 3946     		mov	r1, r7
+ 563 022a 0B20     		movs	r0, #11
+ 564 022c FFF7FEFF 		bl	interruptSetEdge
+ 565              	.LVL59:
+ 163:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 566              		.loc 1 163 13 view .LVU131
+ 567 0230 3146     		mov	r1, r6
+ 568 0232 2820     		movs	r0, #40
+ 569 0234 FFF7FEFF 		bl	interruptNVICSetPriority
+ 570              	.LVL60:
+ 164:modules/drivers/interrupt/interrupt.c ****             break;
+ 571              		.loc 1 164 13 view .LVU132
+ 572 0238 2820     		movs	r0, #40
+ 573 023a FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 574              	.LVL61:
+ 165:modules/drivers/interrupt/interrupt.c ****         case EXTI15:
+ 575              		.loc 1 165 13 view .LVU133
+ 576 023e 10E7     		b	.L11
+ 577              	.L13:
+ 167:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(15, detection);
+ 578              		.loc 1 167 13 view .LVU134
+ 167:modules/drivers/interrupt/interrupt.c ****             interruptSetEdge(15, detection);
+ 579              		.loc 1 167 31 is_stmt 0 view .LVU135
+ 580 0240 084A     		ldr	r2, .L31
+ 581 0242 1368     		ldr	r3, [r2]
+ 582 0244 43F40043 		orr	r3, r3, #32768
+ 583 0248 1360     		str	r3, [r2]
+ 168:modules/drivers/interrupt/interrupt.c ****             interruptNVICSetPriority(40, priority);
+ 584              		.loc 1 168 13 is_stmt 1 view .LVU136
+ 585 024a 3946     		mov	r1, r7
+ 586 024c 0F20     		movs	r0, #15
+ 587 024e FFF7FEFF 		bl	interruptSetEdge
+ 588              	.LVL62:
+ 169:modules/drivers/interrupt/interrupt.c ****             interruptNVICEnableIRQ(40);
+ 589              		.loc 1 169 13 view .LVU137
+ 590 0252 3146     		mov	r1, r6
+ARM GAS  /tmp/cc5Wi5wf.s 			page 16
+
+
+ 591 0254 2820     		movs	r0, #40
+ 592 0256 FFF7FEFF 		bl	interruptNVICSetPriority
+ 593              	.LVL63:
+ 170:modules/drivers/interrupt/interrupt.c ****             break;
+ 594              		.loc 1 170 13 view .LVU138
+ 595 025a 2820     		movs	r0, #40
+ 596 025c FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 597              	.LVL64:
+ 171:modules/drivers/interrupt/interrupt.c ****         default:
+ 598              		.loc 1 171 13 view .LVU139
+ 599              		.loc 1 175 1 is_stmt 0 view .LVU140
+ 600 0260 FFE6     		b	.L11
+ 601              	.L32:
+ 602 0262 00BF     		.align	2
+ 603              	.L31:
+ 604 0264 003C0140 		.word	1073822720
+ 605              		.cfi_endproc
+ 606              	.LFE3:
+ 608              		.section	.text.interruptEnableOthers,"ax",%progbits
+ 609              		.align	1
+ 610              		.global	interruptEnableOthers
+ 611              		.syntax unified
+ 612              		.thumb
+ 613              		.thumb_func
+ 614              		.fpu fpv4-sp-d16
+ 616              	interruptEnableOthers:
+ 617              	.LVL65:
+ 618              	.LFB4:
+ 176:modules/drivers/interrupt/interrupt.c **** 
+ 177:modules/drivers/interrupt/interrupt.c **** void interruptEnableOthers(Syscfg_Interrupt_Control_t position, uint8_t priority)
+ 178:modules/drivers/interrupt/interrupt.c **** {
+ 619              		.loc 1 178 1 is_stmt 1 view -0
+ 620              		.cfi_startproc
+ 621              		@ args = 0, pretend = 0, frame = 0
+ 622              		@ frame_needed = 0, uses_anonymous_args = 0
+ 623              		.loc 1 178 1 is_stmt 0 view .LVU142
+ 624 0000 10B5     		push	{r4, lr}
+ 625              	.LCFI1:
+ 626              		.cfi_def_cfa_offset 8
+ 627              		.cfi_offset 4, -8
+ 628              		.cfi_offset 14, -4
+ 629 0002 0446     		mov	r4, r0
+ 179:modules/drivers/interrupt/interrupt.c ****     if (priority > 0)
+ 630              		.loc 1 179 5 is_stmt 1 view .LVU143
+ 631              		.loc 1 179 8 is_stmt 0 view .LVU144
+ 632 0004 19B9     		cbnz	r1, .L36
+ 633              	.LVL66:
+ 634              	.L34:
+ 180:modules/drivers/interrupt/interrupt.c ****     {
+ 181:modules/drivers/interrupt/interrupt.c ****         interruptNVICSetPriority(position, priority);
+ 182:modules/drivers/interrupt/interrupt.c ****     }
+ 183:modules/drivers/interrupt/interrupt.c ****     interruptNVICEnableIRQ(position);
+ 635              		.loc 1 183 5 is_stmt 1 view .LVU145
+ 636 0006 E0B2     		uxtb	r0, r4
+ 637 0008 FFF7FEFF 		bl	interruptNVICEnableIRQ
+ 638              	.LVL67:
+ 184:modules/drivers/interrupt/interrupt.c **** }
+ARM GAS  /tmp/cc5Wi5wf.s 			page 17
+
+
+ 639              		.loc 1 184 1 is_stmt 0 view .LVU146
+ 640 000c 10BD     		pop	{r4, pc}
+ 641              	.LVL68:
+ 642              	.L36:
+ 181:modules/drivers/interrupt/interrupt.c ****     }
+ 643              		.loc 1 181 9 is_stmt 1 view .LVU147
+ 644 000e C0B2     		uxtb	r0, r0
+ 181:modules/drivers/interrupt/interrupt.c ****     }
+ 645              		.loc 1 181 9 is_stmt 0 view .LVU148
+ 646 0010 FFF7FEFF 		bl	interruptNVICSetPriority
+ 647              	.LVL69:
+ 181:modules/drivers/interrupt/interrupt.c ****     }
+ 648              		.loc 1 181 9 view .LVU149
+ 649 0014 F7E7     		b	.L34
+ 650              		.cfi_endproc
+ 651              	.LFE4:
+ 653              		.section	.text.interruptCheckPendingReg,"ax",%progbits
+ 654              		.align	1
+ 655              		.global	interruptCheckPendingReg
+ 656              		.syntax unified
+ 657              		.thumb
+ 658              		.thumb_func
+ 659              		.fpu fpv4-sp-d16
+ 661              	interruptCheckPendingReg:
+ 662              	.LFB5:
+ 185:modules/drivers/interrupt/interrupt.c **** 
+ 186:modules/drivers/interrupt/interrupt.c **** int interruptCheckPendingReg(void)
+ 187:modules/drivers/interrupt/interrupt.c **** {
+ 663              		.loc 1 187 1 is_stmt 1 view -0
+ 664              		.cfi_startproc
+ 665              		@ args = 0, pretend = 0, frame = 0
+ 666              		@ frame_needed = 0, uses_anonymous_args = 0
+ 667              		@ link register save eliminated.
+ 188:modules/drivers/interrupt/interrupt.c ****     uint8_t i;
+ 668              		.loc 1 188 5 view .LVU151
+ 189:modules/drivers/interrupt/interrupt.c ****     int ret = -1;
+ 669              		.loc 1 189 5 view .LVU152
+ 670              	.LVL70:
+ 190:modules/drivers/interrupt/interrupt.c ****     for (i = 0; i < 22; i++)
+ 671              		.loc 1 190 5 view .LVU153
+ 672              		.loc 1 190 12 is_stmt 0 view .LVU154
+ 673 0000 0023     		movs	r3, #0
+ 674              	.LVL71:
+ 675              	.L38:
+ 676              		.loc 1 190 5 discriminator 1 view .LVU155
+ 677 0002 152B     		cmp	r3, #21
+ 678 0004 0ED8     		bhi	.L42
+ 191:modules/drivers/interrupt/interrupt.c ****     {
+ 192:modules/drivers/interrupt/interrupt.c ****         if (REG_VAL(EXTI_PR) & (1 << i))
+ 679              		.loc 1 192 9 is_stmt 1 view .LVU156
+ 680              		.loc 1 192 13 is_stmt 0 view .LVU157
+ 681 0006 094A     		ldr	r2, .L44
+ 682 0008 1168     		ldr	r1, [r2]
+ 683              		.loc 1 192 35 view .LVU158
+ 684 000a 1846     		mov	r0, r3
+ 685 000c 0122     		movs	r2, #1
+ 686 000e 9A40     		lsls	r2, r2, r3
+ARM GAS  /tmp/cc5Wi5wf.s 			page 18
+
+
+ 687              		.loc 1 192 12 view .LVU159
+ 688 0010 1142     		tst	r1, r2
+ 689 0012 02D1     		bne	.L43
+ 190:modules/drivers/interrupt/interrupt.c ****     for (i = 0; i < 22; i++)
+ 690              		.loc 1 190 26 discriminator 2 view .LVU160
+ 691 0014 0133     		adds	r3, r3, #1
+ 692              	.LVL72:
+ 190:modules/drivers/interrupt/interrupt.c ****     for (i = 0; i < 22; i++)
+ 693              		.loc 1 190 26 discriminator 2 view .LVU161
+ 694 0016 DBB2     		uxtb	r3, r3
+ 695              	.LVL73:
+ 190:modules/drivers/interrupt/interrupt.c ****     for (i = 0; i < 22; i++)
+ 696              		.loc 1 190 26 discriminator 2 view .LVU162
+ 697 0018 F3E7     		b	.L38
+ 698              	.L43:
+ 193:modules/drivers/interrupt/interrupt.c ****         {
+ 194:modules/drivers/interrupt/interrupt.c ****             REG_VAL(EXTI_PR) |= (uint32_t)(1 << i);
+ 699              		.loc 1 194 13 is_stmt 1 view .LVU163
+ 700              		.loc 1 194 30 is_stmt 0 view .LVU164
+ 701 001a 044B     		ldr	r3, .L44
+ 702              	.LVL74:
+ 703              		.loc 1 194 30 view .LVU165
+ 704 001c 1968     		ldr	r1, [r3]
+ 705 001e 0A43     		orrs	r2, r2, r1
+ 706 0020 1A60     		str	r2, [r3]
+ 195:modules/drivers/interrupt/interrupt.c ****             ret = i;
+ 707              		.loc 1 195 13 is_stmt 1 view .LVU166
+ 708              	.LVL75:
+ 196:modules/drivers/interrupt/interrupt.c ****             break;
+ 709              		.loc 1 196 13 view .LVU167
+ 710 0022 7047     		bx	lr
+ 711              	.LVL76:
+ 712              	.L42:
+ 189:modules/drivers/interrupt/interrupt.c ****     for (i = 0; i < 22; i++)
+ 713              		.loc 1 189 9 is_stmt 0 view .LVU168
+ 714 0024 4FF0FF30 		mov	r0, #-1
+ 197:modules/drivers/interrupt/interrupt.c ****         }
+ 198:modules/drivers/interrupt/interrupt.c ****     }
+ 199:modules/drivers/interrupt/interrupt.c ****     return ret;
+ 715              		.loc 1 199 5 is_stmt 1 view .LVU169
+ 200:modules/drivers/interrupt/interrupt.c **** }...
+ 716              		.loc 1 200 1 is_stmt 0 view .LVU170
+ 717 0028 7047     		bx	lr
+ 718              	.L45:
+ 719 002a 00BF     		.align	2
+ 720              	.L44:
+ 721 002c 143C0140 		.word	1073822740
+ 722              		.cfi_endproc
+ 723              	.LFE5:
+ 725              		.text
+ 726              	.Letext0:
+ 727              		.file 2 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ 728              		.file 3 "modules/drivers/syscfg/syscfg.h"
+ 729              		.file 4 "modules/drivers/interrupt/interrupt.h"
+ 730              		.file 5 "modules/drivers/rcc/rcc.h"
+ARM GAS  /tmp/cc5Wi5wf.s 			page 19
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 interrupt.c
+     /tmp/cc5Wi5wf.s:18     .text.interruptSetEdge:0000000000000000 $t
+     /tmp/cc5Wi5wf.s:25     .text.interruptSetEdge:0000000000000000 interruptSetEdge
+     /tmp/cc5Wi5wf.s:93     .text.interruptSetEdge:000000000000003c $d
+     /tmp/cc5Wi5wf.s:99     .text.interruptNVICSetPriority:0000000000000000 $t
+     /tmp/cc5Wi5wf.s:105    .text.interruptNVICSetPriority:0000000000000000 interruptNVICSetPriority
+     /tmp/cc5Wi5wf.s:132    .text.interruptNVICEnableIRQ:0000000000000000 $t
+     /tmp/cc5Wi5wf.s:138    .text.interruptNVICEnableIRQ:0000000000000000 interruptNVICEnableIRQ
+     /tmp/cc5Wi5wf.s:164    .text.interruptNVICEnableIRQ:0000000000000014 $d
+     /tmp/cc5Wi5wf.s:169    .text.interruptEnableEXTI:0000000000000000 $t
+     /tmp/cc5Wi5wf.s:176    .text.interruptEnableEXTI:0000000000000000 interruptEnableEXTI
+     /tmp/cc5Wi5wf.s:213    .text.interruptEnableEXTI:0000000000000022 $d
+     /tmp/cc5Wi5wf.s:229    .text.interruptEnableEXTI:0000000000000042 $t
+     /tmp/cc5Wi5wf.s:604    .text.interruptEnableEXTI:0000000000000264 $d
+     /tmp/cc5Wi5wf.s:609    .text.interruptEnableOthers:0000000000000000 $t
+     /tmp/cc5Wi5wf.s:616    .text.interruptEnableOthers:0000000000000000 interruptEnableOthers
+     /tmp/cc5Wi5wf.s:654    .text.interruptCheckPendingReg:0000000000000000 $t
+     /tmp/cc5Wi5wf.s:661    .text.interruptCheckPendingReg:0000000000000000 interruptCheckPendingReg
+     /tmp/cc5Wi5wf.s:721    .text.interruptCheckPendingReg:000000000000002c $d
+
+UNDEFINED SYMBOLS
+rccEnableAPB2
+syscfgEXTI

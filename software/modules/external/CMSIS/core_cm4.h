@@ -209,7 +209,14 @@
 /**
     \defgroup CMSIS_glob_defs CMSIS Global Defines
 
-    <strong>IO Type Qualifiers</strong> are used
+    <strong>IO Type Qualifiers</strong> are usedsomewhat confusing at first glance, setting these registers is relatively straightforward. E.g. for PB0:
+1
+	
+SYSCFG->EXTICR[0] |= (((uint32_t) 1) << 4);
+
+As each line’s section in the register is four bits, we left-shift the appropriate port value to reach the required position. For PB4 we do the same thing, but in the second register, and without left shift, as that register starts with line 4.
+
+At this point we’re almost ready to configure the EXTI & NVIC registe
     \li to specify the access to peripheral variables.
     \li for automatic generation of peripheral register debug information.
 */

@@ -1,6 +1,11 @@
-build/main.o: main.c modules/drivers/gpio/gpio.h \
- application/config/config.h
+build/main.o: main.c application/config/config.h \
+ modules/drivers/gpio/gpio.h modules/drivers/interrupt/interrupt.h \
+ modules/drivers/syscfg/syscfg.h
+
+application/config/config.h:
 
 modules/drivers/gpio/gpio.h:
 
-application/config/config.h:
+modules/drivers/interrupt/interrupt.h:
+
+modules/drivers/syscfg/syscfg.h:

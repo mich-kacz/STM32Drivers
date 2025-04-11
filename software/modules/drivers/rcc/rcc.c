@@ -19,7 +19,8 @@
 
 void rccEnableAHB1(RccAHB1Control_t bit)
 {
-    REG_VAL(RCC_RCC_CONTROL_AHB1_ENABLE) |= bit;
+    if (!(REG_VAL(RCC_RCC_CONTROL_AHB1_ENABLE) & bit))
+        REG_VAL(RCC_RCC_CONTROL_AHB1_ENABLE) |= bit;
 }
 
 void rccDisableAHB1(RccAHB1Control_t bit)
@@ -29,7 +30,8 @@ void rccDisableAHB1(RccAHB1Control_t bit)
 
 void rccEnableAPB1(RccAPB1Control_t bit)
 {
-    REG_VAL(RCC_RCC_CONTROL_APB1_ENABLE) |= bit;
+    if (!(REG_VAL(RCC_RCC_CONTROL_APB1_ENABLE) & bit))
+        REG_VAL(RCC_RCC_CONTROL_APB1_ENABLE) |= bit;
 }
 void rccDisableAPB1(RccAPB1Control_t bit)
 {
@@ -38,7 +40,8 @@ void rccDisableAPB1(RccAPB1Control_t bit)
 
 void rccEnableAPB2(RccAPB2Control_t bit)
 {
-    REG_VAL(RCC_RCC_CONTROL_APB2_ENABLE) |= bit;
+    if (!(REG_VAL(RCC_RCC_CONTROL_APB2_ENABLE) & bit))
+        REG_VAL(RCC_RCC_CONTROL_APB2_ENABLE) |= bit;
 }
 void rccDisableAPB2(RccAPB2Control_t bit)
 {
@@ -47,6 +50,7 @@ void rccDisableAPB2(RccAPB2Control_t bit)
 
 void rccClocksConfig(RccClocksConfig_t config)
 {
+    REG_VAL(RCC_RCC_CONTROL_CLOCK) = 0x83;
     REG_VAL(RCC_RCC_CONTROL_CLOCK) &= ~(1 << 24);
     while ((REG_VAL(RCC_RCC_CONTROL_CLOCK) & 1 << 25))
         ;
@@ -78,9 +82,11 @@ void rccClocksConfig(RccClocksConfig_t config)
     flashSetDataCache(cacheConfig);
     flashSetLatency(5);
 
+    REG_VAL(RCC_RCC_CONTROL_CLOCK_CONFIG) = (uint32_t)0;
     REG_VAL(RCC_RCC_CONTROL_CLOCK_CONFIG) |=
         (uint32_t)((config.AHB << 4) | (config.APB1 << 10) | (config.APB2 << 13));
 
+    REG_VAL(RCC_RCC_CONTROL_PLL_CONFIG) = (uint32_t)0x00000000;
     REG_VAL(RCC_RCC_CONTROL_PLL_CONFIG) |= (uint32_t)(
         (config.PLLM) | (config.PLLN << 6) | (config.PLLP << 16) | (config.PLLSRC << 22)
         | (config.PLLQ << 24) | (config.PLLR << 28));

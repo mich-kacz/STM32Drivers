@@ -1,23 +1,31 @@
-#include "gpio.h"
 #include "config.h"
+#include "gpio.h"
+#include "interrupt.h"
 
+
+void SysTick_Handler(void)
+{
+    gpioTogglePin(gpioBusA, 8);
+}
 
 int main(void)
 {
     conifg_configBoard();
-    
-    unsigned int i = 0;
 
     while (1)
     {
-        for (i = 0; i < 4000000; i++)
+        /*gpioSetPin(gpioBusA, 5, GpioStateHigh);
+
+        while (zmiennaGlobalna < 499)
         {
         }
-        gpioSetPin(gpioBusA, 7, GpioStateHigh);
-        for (i = 0; i < 4000000; i++)
+        zmiennaGlobalna = 0;
+        gpioSetPin(gpioBusA, 5, GpioStateLow);
+
+        while (zmiennaGlobalna < 499)
         {
         }
-        gpioSetPin(gpioBusA, 7, GpioStateLow);
+        zmiennaGlobalna = 0;*/
     }
 
     return 0;

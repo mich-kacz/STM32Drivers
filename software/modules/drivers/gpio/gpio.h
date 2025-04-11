@@ -69,6 +69,7 @@ typedef struct GpioConfig_s
 void gpioConfigPin(GpioConfig_t config);
 void gpioSetPin(GpioBus_t bus, uint8_t number, GpioPinState_t state);
 GpioPinState_t gpioReadPin(GpioBus_t bus, uint8_t number);
+void gpioTogglePin(GpioBus_t bus, uint8_t number);
 void gpioReset(void);
 
 #endif

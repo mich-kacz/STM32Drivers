@@ -1,0 +1,355 @@
+ARM GAS  /tmp/ccKYrZJU.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"syscfg.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.syscfgEXTI,"ax",%progbits
+  18              		.align	1
+  19              		.global	syscfgEXTI
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	syscfgEXTI:
+  27              	.LVL0:
+  28              	.LFB0:
+  29              		.file 1 "modules/drivers/syscfg/syscfg.c"
+   1:modules/drivers/syscfg/syscfg.c **** #include "syscfg.h"
+   2:modules/drivers/syscfg/syscfg.c **** 
+   3:modules/drivers/syscfg/syscfg.c **** #include <stdint.h>
+   4:modules/drivers/syscfg/syscfg.c **** 
+   5:modules/drivers/syscfg/syscfg.c **** #include "syscfgRegisters.h"
+   6:modules/drivers/syscfg/syscfg.c **** 
+   7:modules/drivers/syscfg/syscfg.c **** #define REG_VAL(X) (*(volatile uint32_t*)X)
+   8:modules/drivers/syscfg/syscfg.c **** 
+   9:modules/drivers/syscfg/syscfg.c **** void syscfgEXTI(Syscfg_EXTICRx_Control_t number, Syscfg_EXTICRx_Config_t bus)
+  10:modules/drivers/syscfg/syscfg.c **** {
+  30              		.loc 1 10 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		@ link register save eliminated.
+  11:modules/drivers/syscfg/syscfg.c ****     switch (number)
+  35              		.loc 1 11 5 view .LVU1
+  36 0000 0F28     		cmp	r0, #15
+  37 0002 64D8     		bhi	.L1
+  38 0004 DFE800F0 		tbb	[pc, r0]
+  39              	.L4:
+  40 0008 08       		.byte	(.L19-.L4)/2
+  41 0009 0D       		.byte	(.L18-.L4)/2
+  42 000a 12       		.byte	(.L17-.L4)/2
+  43 000b 17       		.byte	(.L16-.L4)/2
+  44 000c 1C       		.byte	(.L15-.L4)/2
+  45 000d 22       		.byte	(.L14-.L4)/2
+  46 000e 28       		.byte	(.L13-.L4)/2
+  47 000f 2E       		.byte	(.L12-.L4)/2
+ARM GAS  /tmp/ccKYrZJU.s 			page 2
+
+
+  48 0010 34       		.byte	(.L11-.L4)/2
+  49 0011 3A       		.byte	(.L10-.L4)/2
+  50 0012 40       		.byte	(.L9-.L4)/2
+  51 0013 46       		.byte	(.L8-.L4)/2
+  52 0014 4C       		.byte	(.L7-.L4)/2
+  53 0015 52       		.byte	(.L6-.L4)/2
+  54 0016 58       		.byte	(.L5-.L4)/2
+  55 0017 5E       		.byte	(.L3-.L4)/2
+  56              		.p2align 1
+  57              	.L19:
+  12:modules/drivers/syscfg/syscfg.c ****     {
+  13:modules/drivers/syscfg/syscfg.c ****         case EXTI0:
+  14:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR1) |= bus;
+  58              		.loc 1 14 13 view .LVU2
+  59              		.loc 1 14 37 is_stmt 0 view .LVU3
+  60 0018 2D4A     		ldr	r2, .L20
+  61 001a 1368     		ldr	r3, [r2]
+  62 001c 1943     		orrs	r1, r1, r3
+  63              	.LVL1:
+  64              		.loc 1 14 37 view .LVU4
+  65 001e 1160     		str	r1, [r2]
+  15:modules/drivers/syscfg/syscfg.c ****             break;
+  66              		.loc 1 15 13 is_stmt 1 view .LVU5
+  67 0020 7047     		bx	lr
+  68              	.LVL2:
+  69              	.L18:
+  16:modules/drivers/syscfg/syscfg.c ****         case EXTI4:
+  17:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR2) |= bus;
+  70              		.loc 1 17 13 view .LVU6
+  71              		.loc 1 17 37 is_stmt 0 view .LVU7
+  72 0022 2C4A     		ldr	r2, .L20+4
+  73 0024 1368     		ldr	r3, [r2]
+  74 0026 1943     		orrs	r1, r1, r3
+  75              	.LVL3:
+  76              		.loc 1 17 37 view .LVU8
+  77 0028 1160     		str	r1, [r2]
+  18:modules/drivers/syscfg/syscfg.c ****             break;
+  78              		.loc 1 18 13 is_stmt 1 view .LVU9
+  79 002a 7047     		bx	lr
+  80              	.LVL4:
+  81              	.L17:
+  19:modules/drivers/syscfg/syscfg.c ****         case EXTI8:
+  20:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR3) |= bus;
+  82              		.loc 1 20 13 view .LVU10
+  83              		.loc 1 20 37 is_stmt 0 view .LVU11
+  84 002c 2A4A     		ldr	r2, .L20+8
+  85 002e 1368     		ldr	r3, [r2]
+  86 0030 1943     		orrs	r1, r1, r3
+  87              	.LVL5:
+  88              		.loc 1 20 37 view .LVU12
+  89 0032 1160     		str	r1, [r2]
+  21:modules/drivers/syscfg/syscfg.c ****             break;
+  90              		.loc 1 21 13 is_stmt 1 view .LVU13
+  91 0034 7047     		bx	lr
+  92              	.LVL6:
+  93              	.L16:
+  22:modules/drivers/syscfg/syscfg.c ****         case EXTI12:
+ARM GAS  /tmp/ccKYrZJU.s 			page 3
+
+
+  23:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR4) |= bus;
+  94              		.loc 1 23 13 view .LVU14
+  95              		.loc 1 23 37 is_stmt 0 view .LVU15
+  96 0036 294A     		ldr	r2, .L20+12
+  97 0038 1368     		ldr	r3, [r2]
+  98 003a 1943     		orrs	r1, r1, r3
+  99              	.LVL7:
+ 100              		.loc 1 23 37 view .LVU16
+ 101 003c 1160     		str	r1, [r2]
+  24:modules/drivers/syscfg/syscfg.c ****             break;
+ 102              		.loc 1 24 13 is_stmt 1 view .LVU17
+ 103 003e 7047     		bx	lr
+ 104              	.LVL8:
+ 105              	.L15:
+  25:modules/drivers/syscfg/syscfg.c ****         case EXTI1:
+  26:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR1) |= (bus << 4);
+ 106              		.loc 1 26 13 view .LVU18
+ 107              		.loc 1 26 37 is_stmt 0 view .LVU19
+ 108 0040 234A     		ldr	r2, .L20
+ 109 0042 1368     		ldr	r3, [r2]
+ 110 0044 43EA0111 		orr	r1, r3, r1, lsl #4
+ 111              	.LVL9:
+ 112              		.loc 1 26 37 view .LVU20
+ 113 0048 1160     		str	r1, [r2]
+  27:modules/drivers/syscfg/syscfg.c ****             break;
+ 114              		.loc 1 27 13 is_stmt 1 view .LVU21
+ 115 004a 7047     		bx	lr
+ 116              	.LVL10:
+ 117              	.L14:
+  28:modules/drivers/syscfg/syscfg.c ****         case EXTI5:
+  29:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR2) |= (bus << 4);
+ 118              		.loc 1 29 13 view .LVU22
+ 119              		.loc 1 29 37 is_stmt 0 view .LVU23
+ 120 004c 214A     		ldr	r2, .L20+4
+ 121 004e 1368     		ldr	r3, [r2]
+ 122 0050 43EA0111 		orr	r1, r3, r1, lsl #4
+ 123              	.LVL11:
+ 124              		.loc 1 29 37 view .LVU24
+ 125 0054 1160     		str	r1, [r2]
+  30:modules/drivers/syscfg/syscfg.c ****             break;
+ 126              		.loc 1 30 13 is_stmt 1 view .LVU25
+ 127 0056 7047     		bx	lr
+ 128              	.LVL12:
+ 129              	.L13:
+  31:modules/drivers/syscfg/syscfg.c ****         case EXTI9:
+  32:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR3) |= (bus << 4);
+ 130              		.loc 1 32 13 view .LVU26
+ 131              		.loc 1 32 37 is_stmt 0 view .LVU27
+ 132 0058 1F4A     		ldr	r2, .L20+8
+ 133 005a 1368     		ldr	r3, [r2]
+ 134 005c 43EA0111 		orr	r1, r3, r1, lsl #4
+ 135              	.LVL13:
+ 136              		.loc 1 32 37 view .LVU28
+ 137 0060 1160     		str	r1, [r2]
+  33:modules/drivers/syscfg/syscfg.c ****             break;
+ 138              		.loc 1 33 13 is_stmt 1 view .LVU29
+ 139 0062 7047     		bx	lr
+ARM GAS  /tmp/ccKYrZJU.s 			page 4
+
+
+ 140              	.LVL14:
+ 141              	.L12:
+  34:modules/drivers/syscfg/syscfg.c ****         case EXTI13:
+  35:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR4) |= (bus << 4);
+ 142              		.loc 1 35 13 view .LVU30
+ 143              		.loc 1 35 37 is_stmt 0 view .LVU31
+ 144 0064 1D4A     		ldr	r2, .L20+12
+ 145 0066 1368     		ldr	r3, [r2]
+ 146 0068 43EA0111 		orr	r1, r3, r1, lsl #4
+ 147              	.LVL15:
+ 148              		.loc 1 35 37 view .LVU32
+ 149 006c 1160     		str	r1, [r2]
+  36:modules/drivers/syscfg/syscfg.c ****             break;
+ 150              		.loc 1 36 13 is_stmt 1 view .LVU33
+ 151 006e 7047     		bx	lr
+ 152              	.LVL16:
+ 153              	.L11:
+  37:modules/drivers/syscfg/syscfg.c ****         case EXTI2:
+  38:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR1) |= (bus << 8);
+ 154              		.loc 1 38 13 view .LVU34
+ 155              		.loc 1 38 37 is_stmt 0 view .LVU35
+ 156 0070 174A     		ldr	r2, .L20
+ 157 0072 1368     		ldr	r3, [r2]
+ 158 0074 43EA0121 		orr	r1, r3, r1, lsl #8
+ 159              	.LVL17:
+ 160              		.loc 1 38 37 view .LVU36
+ 161 0078 1160     		str	r1, [r2]
+  39:modules/drivers/syscfg/syscfg.c ****             break;
+ 162              		.loc 1 39 13 is_stmt 1 view .LVU37
+ 163 007a 7047     		bx	lr
+ 164              	.LVL18:
+ 165              	.L10:
+  40:modules/drivers/syscfg/syscfg.c ****         case EXTI6:
+  41:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR2) |= (bus << 8);
+ 166              		.loc 1 41 13 view .LVU38
+ 167              		.loc 1 41 37 is_stmt 0 view .LVU39
+ 168 007c 154A     		ldr	r2, .L20+4
+ 169 007e 1368     		ldr	r3, [r2]
+ 170 0080 43EA0121 		orr	r1, r3, r1, lsl #8
+ 171              	.LVL19:
+ 172              		.loc 1 41 37 view .LVU40
+ 173 0084 1160     		str	r1, [r2]
+  42:modules/drivers/syscfg/syscfg.c ****             break;
+ 174              		.loc 1 42 13 is_stmt 1 view .LVU41
+ 175 0086 7047     		bx	lr
+ 176              	.LVL20:
+ 177              	.L9:
+  43:modules/drivers/syscfg/syscfg.c ****         case EXTI10:
+  44:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR3) |= (bus << 8);
+ 178              		.loc 1 44 13 view .LVU42
+ 179              		.loc 1 44 37 is_stmt 0 view .LVU43
+ 180 0088 134A     		ldr	r2, .L20+8
+ 181 008a 1368     		ldr	r3, [r2]
+ 182 008c 43EA0121 		orr	r1, r3, r1, lsl #8
+ 183              	.LVL21:
+ 184              		.loc 1 44 37 view .LVU44
+ 185 0090 1160     		str	r1, [r2]
+ARM GAS  /tmp/ccKYrZJU.s 			page 5
+
+
+  45:modules/drivers/syscfg/syscfg.c ****             break;
+ 186              		.loc 1 45 13 is_stmt 1 view .LVU45
+ 187 0092 7047     		bx	lr
+ 188              	.LVL22:
+ 189              	.L8:
+  46:modules/drivers/syscfg/syscfg.c ****         case EXTI14:
+  47:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR4) |= (bus << 8);
+ 190              		.loc 1 47 13 view .LVU46
+ 191              		.loc 1 47 37 is_stmt 0 view .LVU47
+ 192 0094 114A     		ldr	r2, .L20+12
+ 193 0096 1368     		ldr	r3, [r2]
+ 194 0098 43EA0121 		orr	r1, r3, r1, lsl #8
+ 195              	.LVL23:
+ 196              		.loc 1 47 37 view .LVU48
+ 197 009c 1160     		str	r1, [r2]
+  48:modules/drivers/syscfg/syscfg.c ****             break;
+ 198              		.loc 1 48 13 is_stmt 1 view .LVU49
+ 199 009e 7047     		bx	lr
+ 200              	.LVL24:
+ 201              	.L7:
+  49:modules/drivers/syscfg/syscfg.c ****         case EXTI3:
+  50:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR1) |= (bus << 12);
+ 202              		.loc 1 50 13 view .LVU50
+ 203              		.loc 1 50 37 is_stmt 0 view .LVU51
+ 204 00a0 0B4A     		ldr	r2, .L20
+ 205 00a2 1368     		ldr	r3, [r2]
+ 206 00a4 43EA0131 		orr	r1, r3, r1, lsl #12
+ 207              	.LVL25:
+ 208              		.loc 1 50 37 view .LVU52
+ 209 00a8 1160     		str	r1, [r2]
+  51:modules/drivers/syscfg/syscfg.c ****             break;
+ 210              		.loc 1 51 13 is_stmt 1 view .LVU53
+ 211 00aa 7047     		bx	lr
+ 212              	.LVL26:
+ 213              	.L6:
+  52:modules/drivers/syscfg/syscfg.c ****         case EXTI7:
+  53:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR2) |= (bus << 12);
+ 214              		.loc 1 53 13 view .LVU54
+ 215              		.loc 1 53 37 is_stmt 0 view .LVU55
+ 216 00ac 094A     		ldr	r2, .L20+4
+ 217 00ae 1368     		ldr	r3, [r2]
+ 218 00b0 43EA0131 		orr	r1, r3, r1, lsl #12
+ 219              	.LVL27:
+ 220              		.loc 1 53 37 view .LVU56
+ 221 00b4 1160     		str	r1, [r2]
+  54:modules/drivers/syscfg/syscfg.c ****             break;
+ 222              		.loc 1 54 13 is_stmt 1 view .LVU57
+ 223 00b6 7047     		bx	lr
+ 224              	.LVL28:
+ 225              	.L5:
+  55:modules/drivers/syscfg/syscfg.c ****         case EXTI11:
+  56:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR3) |= (bus << 12);
+ 226              		.loc 1 56 13 view .LVU58
+ 227              		.loc 1 56 37 is_stmt 0 view .LVU59
+ 228 00b8 074A     		ldr	r2, .L20+8
+ 229 00ba 1368     		ldr	r3, [r2]
+ 230 00bc 43EA0131 		orr	r1, r3, r1, lsl #12
+ARM GAS  /tmp/ccKYrZJU.s 			page 6
+
+
+ 231              	.LVL29:
+ 232              		.loc 1 56 37 view .LVU60
+ 233 00c0 1160     		str	r1, [r2]
+  57:modules/drivers/syscfg/syscfg.c ****             break;
+ 234              		.loc 1 57 13 is_stmt 1 view .LVU61
+ 235 00c2 7047     		bx	lr
+ 236              	.LVL30:
+ 237              	.L3:
+  58:modules/drivers/syscfg/syscfg.c ****         case EXTI15:
+  59:modules/drivers/syscfg/syscfg.c ****             REG_VAL(SYSCFG_EXTICR4) |= (bus << 12);
+ 238              		.loc 1 59 13 view .LVU62
+ 239              		.loc 1 59 37 is_stmt 0 view .LVU63
+ 240 00c4 054A     		ldr	r2, .L20+12
+ 241 00c6 1368     		ldr	r3, [r2]
+ 242 00c8 43EA0131 		orr	r1, r3, r1, lsl #12
+ 243              	.LVL31:
+ 244              		.loc 1 59 37 view .LVU64
+ 245 00cc 1160     		str	r1, [r2]
+  60:modules/drivers/syscfg/syscfg.c ****             break;
+ 246              		.loc 1 60 13 is_stmt 1 view .LVU65
+ 247              	.L1:
+  61:modules/drivers/syscfg/syscfg.c ****         default:
+  62:modules/drivers/syscfg/syscfg.c ****             break;
+  63:modules/drivers/syscfg/syscfg.c ****     }
+  64:modules/drivers/syscfg/syscfg.c **** }...
+ 248              		.loc 1 64 1 is_stmt 0 view .LVU66
+ 249 00ce 7047     		bx	lr
+ 250              	.L21:
+ 251              		.align	2
+ 252              	.L20:
+ 253 00d0 08380140 		.word	1073821704
+ 254 00d4 0C380140 		.word	1073821708
+ 255 00d8 10380140 		.word	1073821712
+ 256 00dc 14380140 		.word	1073821716
+ 257              		.cfi_endproc
+ 258              	.LFE0:
+ 260              		.text
+ 261              	.Letext0:
+ 262              		.file 2 "modules/drivers/syscfg/syscfg.h"
+ 263              		.file 3 "/usr/lib/gcc/arm-none-eabi/8.3.1/include/stdint.h"
+ARM GAS  /tmp/ccKYrZJU.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 syscfg.c
+     /tmp/ccKYrZJU.s:18     .text.syscfgEXTI:0000000000000000 $t
+     /tmp/ccKYrZJU.s:26     .text.syscfgEXTI:0000000000000000 syscfgEXTI
+     /tmp/ccKYrZJU.s:40     .text.syscfgEXTI:0000000000000008 $d
+     /tmp/ccKYrZJU.s:56     .text.syscfgEXTI:0000000000000018 $t
+     /tmp/ccKYrZJU.s:253    .text.syscfgEXTI:00000000000000d0 $d
+
+NO UNDEFINED SYMBOLS

@@ -81,15 +81,14 @@ static void gpioInit(GpioBus_t bus)
 void gpioConfigPin(GpioConfig_t config)
 {
     gpioInit(config.bus);
-    volatile uint32_t* regBase = (void*)getBusReg(config.bus);
-    volatile uint32_t* reg     = regBase + GPIO_MODER_OFFSET;
-    *reg |= (uint32_t)(config.mode << (config.pinNumber * 2));
-    reg = regBase + GPIO_OTYPER_OFFSET;
-    *reg |= (uint32_t)(config.type << config.pinNumber);
-    reg = regBase + GPIO_OSPEEDER_OFFSET;
-    *reg |= (uint32_t)(config.speed << (config.pinNumber * 2));
-    reg = regBase + GPIO_PUPDR_OFFSET;
-    *reg |= (uint32_t)(config.pull << (config.pinNumber * 2));
+    REG_VAL((getBusReg(config.bus) + GPIO_MODER_OFFSET)) |=
+        (uint32_t)(config.mode << (config.pinNumber * 2));
+    REG_VAL((getBusReg(config.bus) + GPIO_OTYPER_OFFSET)) |=
+        (uint32_t)(config.type << config.pinNumber);
+    REG_VAL((getBusReg(config.bus) + GPIO_OSPEEDER_OFFSET)) |=
+        (uint32_t)(config.speed << (config.pinNumber * 2));
+    REG_VAL((getBusReg(config.bus) + GPIO_PUPDR_OFFSET)) |=
+        (uint32_t)(config.pull << (config.pinNumber * 2));
 }
 
 void gpioSetPin(GpioBus_t bus, uint8_t number, GpioPinState_t state)
@@ -108,6 +107,11 @@ void gpioSetPin(GpioBus_t bus, uint8_t number, GpioPinState_t state)
     }
 }
 
+void gpioTogglePin(GpioBus_t bus, uint8_t number)
+{
+    volatile uint16_t* reg = (void*)getBusReg(bus) + GPIO_ODR_OFFSET;
+    *reg ^= (1 << number);
+}
 
 GpioPinState_t gpioReadPin(GpioBus_t bus, uint8_t number)
 {
